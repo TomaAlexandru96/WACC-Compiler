@@ -21,17 +21,21 @@ public class StringNode extends LiteralNode<WACCParser.StrLiteralContext> {
     public StringNode(SymbolTable currentST, WACCParser.StrLiteralContext ctx) {
         super(currentST, ctx);
 
-        this.value = ctx.STR_LITERAL().getText().substring(1, ctx.STR_LITERAL().getText().length() - 1);
+        this.value = ctx.STR_LITERAL().getText().substring(1, ctx.STR_LITERAL
+                ().getText().length() - 1);
         this.type = new ArrayObj(new CharObj(), this.value.length());
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         codeGenRef.addMessage(value);
         String message = codeGenRef.getLastMessage();
 
         return new LinkedList<Instruction>() {{
-            add(new BaseInstruction(Ins.getLdrInstruction(type), availableRegisters.get(0), new Immediate(message)));
+            add(new BaseInstruction(Ins.getLdrInstruction(type),
+                    availableRegisters.get(0), new Immediate(message)));
         }};
     }
 }

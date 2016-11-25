@@ -25,9 +25,12 @@ public class CharNode extends LiteralNode<WACCParser.CharLiteralContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         return new LinkedList<Instruction>() {{
-            add(new BaseInstruction(Ins.MOV, availableRegisters.get(0), new Offset(value)));
+            add(new BaseInstruction(Ins.MOV, availableRegisters.get(0), new
+                    Offset(value)));
         }};
     }
 }

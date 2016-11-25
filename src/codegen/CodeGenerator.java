@@ -67,8 +67,8 @@ public class CodeGenerator {
             for (Class<? extends LibFunc> dep : func.getDependencies()) {
                 useLibFunc(dep);
             }
-        } catch(Exception e) {
-            assert(false): "CodeGenerator: Should not get here";
+        } catch (Exception e) {
+            assert (false) : "CodeGenerator: Should not get here";
         }
     }
 
@@ -93,13 +93,15 @@ public class CodeGenerator {
         return sb.toString();
     }
 
-    public static List<Instruction> makeSpaceOnStackAndRestore(SymbolTable currentST, List<Instruction> inBetween) {
+    public static List<Instruction> makeSpaceOnStackAndRestore(SymbolTable
+                                                                       currentST, List<Instruction> inBetween) {
         int spaceSize = currentST.getOffsetLocation();
 
         return makeSpaceOnStackAndRestore(spaceSize, inBetween);
     }
 
-    public static List<Instruction> makeSpaceOnStackAndRestore(int spaceSize, List<Instruction> inBetween) {
+    public static List<Instruction> makeSpaceOnStackAndRestore(int spaceSize,
+                                                               List<Instruction> inBetween) {
         List<Instruction> ins = new ArrayList<>();
         ins.addAll(makeSpaceOnStack(spaceSize));
         ins.addAll(inBetween);
@@ -115,18 +117,21 @@ public class CodeGenerator {
         return addOrRemoveSpaceOnStack(spaceSize, true);
     }
 
-    private static List<Instruction> addOrRemoveSpaceOnStack(int spaceSize, boolean withRemove) {
+    private static List<Instruction> addOrRemoveSpaceOnStack(int spaceSize,
+                                                             boolean withRemove) {
         Ins instr = withRemove ? Ins.ADD : Ins.SUB;
         List<Instruction> ins = new ArrayList<>();
         int remainder = spaceSize % Offset.MAXIMUM_OFFSET;
         int quotient = spaceSize / Offset.MAXIMUM_OFFSET;
 
         if (remainder != 0) {
-            ins.add(new BaseInstruction(instr, Register.SP, Register.SP, new Offset(remainder)));
+            ins.add(new BaseInstruction(instr, Register.SP, Register.SP, new
+                    Offset(remainder)));
         }
 
         for (int i = 1; i <= quotient; i++) {
-            ins.add(new BaseInstruction(instr, Register.SP, Register.SP, new Offset(Offset.MAXIMUM_OFFSET)));
+            ins.add(new BaseInstruction(instr, Register.SP, Register.SP, new
+                    Offset(Offset.MAXIMUM_OFFSET)));
         }
         return ins;
     }
@@ -142,18 +147,25 @@ public class CodeGenerator {
         int elemSize = type.getSize();
         int offset = currentST.lookupOffset(ident);
 
-        instructions.add(new BaseInstruction(Ins.ADD, reg1, Register.SP, new Offset(offset)));
+        instructions.add(new BaseInstruction(Ins.ADD, reg1, Register.SP, new
+                Offset(offset)));
 
-        for(int i = 0; i < exprNodeList.size(); i++) {
-            List<Register> temp = availableRegisters.stream().skip(1).collect(Collectors.toList());
-            instructions.addAll(exprNodeList.get(i).generateInstructions(codeGenRef, temp));
-            instructions.add(new BaseInstruction(Ins.LDR, reg1, new StackLocation(reg1)));
+        for (int i = 0; i < exprNodeList.size(); i++) {
+            List<Register> temp = availableRegisters.stream().skip(1).collect
+                    (Collectors.toList());
+            instructions.addAll(exprNodeList.get(i).generateInstructions
+                    (codeGenRef, temp));
+            instructions.add(new BaseInstruction(Ins.LDR, reg1, new
+                    StackLocation(reg1)));
             instructions.add(new BaseInstruction(Ins.MOV, Register.R0, reg2));
             instructions.add(new BaseInstruction(Ins.MOV, Register.R1, reg1));
-            instructions.add(new BaseInstruction(Ins.BL, new LabelOp(CheckArrayBounds.FUNC_NAME)));
-            instructions.add(new BaseInstruction(Ins.ADD, reg1, reg1, new Offset(4)));
-            if(i == exprNodeList.size() - 1 && elemSize < 4) {
-                instructions.add(new BaseInstruction(Ins.ADD, reg1, reg1, reg2));
+            instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                    (CheckArrayBounds.FUNC_NAME)));
+            instructions.add(new BaseInstruction(Ins.ADD, reg1, reg1, new
+                    Offset(4)));
+            if (i == exprNodeList.size() - 1 && elemSize < 4) {
+                instructions.add(new BaseInstruction(Ins.ADD, reg1, reg1,
+                        reg2));
             } else {
                 instructions.add(new BaseInstruction(Ins.ADD, reg1, reg1, reg2,
                         new ShiftInstruction(Ins.LSL, new Offset(2))));
@@ -165,20 +177,27 @@ public class CodeGenerator {
         return instructions;
     }
 
-    public static List<Instruction> getPairPointer(CodeGenerator codeGenRef, List<Register> availableRegisters,
-                                                   ExprNode expr, boolean isFst) {
+    public static List<Instruction> getPairPointer(CodeGenerator codeGenRef,
+                                                   List<Register>
+                                                           availableRegisters,
+                                                   ExprNode expr, boolean
+                                                           isFst) {
         List<Instruction> instructions = new ArrayList<>();
-        instructions.addAll(expr.generateInstructions(codeGenRef, availableRegisters));
+        instructions.addAll(expr.generateInstructions(codeGenRef,
+                availableRegisters));
         Register ans = availableRegisters.get(0);
 
         instructions.add(new BaseInstruction(Ins.MOV, Register.R0, ans));
-        instructions.add(new BaseInstruction(Ins.BL, new LabelOp(CheckNullPointer.FUNC_NAME)));
+        instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                (CheckNullPointer.FUNC_NAME)));
         codeGenRef.useLibFunc(CheckNullPointer.class);
 
         if (isFst) {
-            instructions.add(new BaseInstruction(Ins.LDR, ans, new StackLocation(ans)));
+            instructions.add(new BaseInstruction(Ins.LDR, ans, new
+                    StackLocation(ans)));
         } else {
-            instructions.add(new BaseInstruction(Ins.LDR, ans, new StackLocation(ans, new Offset(4))));
+            instructions.add(new BaseInstruction(Ins.LDR, ans, new
+                    StackLocation(ans, new Offset(4))));
         }
 
         return instructions;

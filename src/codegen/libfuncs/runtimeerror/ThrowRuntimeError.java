@@ -24,20 +24,22 @@ public class ThrowRuntimeError extends LibFunc {
 
     /**
      * lib_throw_runtime_error:
-     *		BL p_print_string
-     *		MOV r0, #-1
-     *		BL exit
+     * BL p_print_string
+     * MOV r0, #-1
+     * BL exit
+     *
      * @return list of instructions needed for the lib_throw_runtime_error label
      */
     @Override
     public List<Instruction> getInstructions() {
-        return new ArrayList<Instruction>() {{
-            add(new LabelIns(FUNC_NAME));
-            add(new BaseInstruction(Ins.BL
-                    , new LabelOp(PrintString.FUNC_NAME)));
-            add(new BaseInstruction(Ins.MOV, Register.R0, new Offset(-1)));
-            add(new BaseInstruction(Ins.BL, new LabelOp("exit")));
-        }
+        return new ArrayList<Instruction>() {
+            {
+                add(new LabelIns(FUNC_NAME));
+                add(new BaseInstruction(Ins.BL
+                        , new LabelOp(PrintString.FUNC_NAME)));
+                add(new BaseInstruction(Ins.MOV, Register.R0, new Offset(-1)));
+                add(new BaseInstruction(Ins.BL, new LabelOp("exit")));
+            }
         };
     }
 

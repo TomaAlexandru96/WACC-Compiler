@@ -85,14 +85,18 @@ public class ArrayElementNode extends ExprNode<WACCParser.ArrayElemContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new LinkedList<>();
 
-        instructions.addAll(CodeGenerator.getArrayPointer(codeGenRef, availableRegisters,
+        instructions.addAll(CodeGenerator.getArrayPointer(codeGenRef,
+                availableRegisters,
                 exprNodeList, type, currentST, ident));
         Register reg1 = availableRegisters.get(0);
 
-        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type), reg1, new StackLocation(reg1)));
+        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type),
+                reg1, new StackLocation(reg1)));
 
         return instructions;
     }

@@ -30,7 +30,7 @@ public class AssignPrimitiveNode extends StatNode<WACCParser
 
     public AssignPrimitiveNode(SymbolTable currentST, WACCParser
             .AssignPrimitiveStatContext ctx, TypeNode type, AssignRhsNode
-            assignRhs) {
+                                       assignRhs) {
         super(currentST, ctx);
 
         if (type.hasErrors() || assignRhs.hasErrors()) {
@@ -74,10 +74,13 @@ public class AssignPrimitiveNode extends StatNode<WACCParser
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
 
-        instructions.addAll(rhs.generateInstructions(codeGenRef, availableRegisters));
+        instructions.addAll(rhs.generateInstructions(codeGenRef,
+                availableRegisters));
         currentST.setInitialised(ident);
 
         int offset = currentST.lookupOffset(ident);
@@ -88,7 +91,8 @@ public class AssignPrimitiveNode extends StatNode<WACCParser
             location = new StackLocation(Register.SP, new Offset(offset));
         }
 
-        instructions.add(new BaseInstruction(Ins.getStrInstruciton(type), availableRegisters.get(0), location));
+        instructions.add(new BaseInstruction(Ins.getStrInstruciton(type),
+                availableRegisters.get(0), location));
 
         return instructions;
 

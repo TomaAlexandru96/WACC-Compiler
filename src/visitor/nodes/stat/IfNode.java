@@ -71,19 +71,24 @@ public class IfNode extends StatNode<WACCParser.IfStatContext> {
         instructions.addAll
                 (exprNode.generateInstructions(codeGenRef, availableRegisters));
         Register exprResult = availableRegisters.get(0);
-        instructions.add(new BaseInstruction(Ins.CMP, exprResult, new Offset(0)));
+        instructions.add(new BaseInstruction(Ins.CMP, exprResult, new Offset
+                (0)));
         instructions.add(new BaseInstruction(Ins.BEQ, new LabelOp(label1)));
 
         // Get the instructions in the first block
-        List<Instruction> inBetweenThen = thenStat.generateInstructions(codeGenRef, availableRegisters);
-        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore(thenStat.getCurrentST(), inBetweenThen));
+        List<Instruction> inBetweenThen = thenStat.generateInstructions
+                (codeGenRef, availableRegisters);
+        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore(thenStat
+                .getCurrentST(), inBetweenThen));
 
         instructions.add(new BaseInstruction(Ins.BL, new LabelOp(label2)));
         instructions.add(new LabelIns(label1));
 
         // Get the instructions in the second block
-        List<Instruction> inBetweenElse = elseStat.generateInstructions(codeGenRef, availableRegisters);
-        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore(elseStat.getCurrentST(), inBetweenElse));
+        List<Instruction> inBetweenElse = elseStat.generateInstructions
+                (codeGenRef, availableRegisters);
+        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore(elseStat
+                .getCurrentST(), inBetweenElse));
 
         instructions.add(new LabelIns(label2));
 

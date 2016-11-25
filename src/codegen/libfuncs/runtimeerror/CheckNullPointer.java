@@ -15,7 +15,7 @@ public class CheckNullPointer extends LibFunc {
 
     public static final String FUNC_NAME = "lib_check_null_pointer";
     public static final String ERROR_MESSAGE
-      = "NullReferenceError: dereference a null reference.\\n\\0";
+            = "NullReferenceError: dereference a null reference.\\n\\0";
     private final String ERROR_MESSAGE_LOCATION;
 
     /**
@@ -31,25 +31,27 @@ public class CheckNullPointer extends LibFunc {
 
     /**
      * lib_check_null_pointer:
-     *		PUSH {lr}
-     *		CMP r0, #0
-     *		LDREQ r0, =msg_0
-     *		BLEQ p_throw_runtime_error
-     *		POP {pc}
+     * PUSH {lr}
+     * CMP r0, #0
+     * LDREQ r0, =msg_0
+     * BLEQ p_throw_runtime_error
+     * POP {pc}
+     *
      * @return list of instructions needed for the check_null_pointer label
      */
     @Override
     public List<Instruction> getInstructions() {
-        return new ArrayList<Instruction>() {{
-            add(new LabelIns(FUNC_NAME));
-            add(new BaseInstruction(Ins.PUSH, new RegList(Register.LR)));
-            add(new BaseInstruction(Ins.CMP, Register.R0, new Offset(0)));
-            add(new BaseInstruction(Ins.LDREQ, Register.R0
-                    , new Immediate(ERROR_MESSAGE_LOCATION)));
-            add(new BaseInstruction(Ins.BLEQ
-                    , new LabelOp(ThrowRuntimeError.FUNC_NAME)));
-            add(new BaseInstruction(Ins.POP, new RegList(Register.PC)));
-        }
+        return new ArrayList<Instruction>() {
+            {
+                add(new LabelIns(FUNC_NAME));
+                add(new BaseInstruction(Ins.PUSH, new RegList(Register.LR)));
+                add(new BaseInstruction(Ins.CMP, Register.R0, new Offset(0)));
+                add(new BaseInstruction(Ins.LDREQ, Register.R0
+                        , new Immediate(ERROR_MESSAGE_LOCATION)));
+                add(new BaseInstruction(Ins.BLEQ
+                        , new LabelOp(ThrowRuntimeError.FUNC_NAME)));
+                add(new BaseInstruction(Ins.POP, new RegList(Register.PC)));
+            }
         };
     }
 

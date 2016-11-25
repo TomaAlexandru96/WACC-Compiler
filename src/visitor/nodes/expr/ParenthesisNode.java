@@ -29,7 +29,9 @@ public class ParenthesisNode extends ExprNode<WACCParser
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         return argument.generateInstructions(codeGenRef, availableRegisters);
     }
 }

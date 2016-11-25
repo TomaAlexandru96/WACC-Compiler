@@ -38,10 +38,14 @@ public class ReturnNode extends StatNode<WACCParser.ReturnStatContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
-        instructions.addAll(retrunExpr.generateInstructions(codeGenRef, availableRegisters));
-        instructions.addAll(CodeGenerator.removeSpaceOnStack(currentST.getReturnOffsetSize()));
+        instructions.addAll(retrunExpr.generateInstructions(codeGenRef,
+                availableRegisters));
+        instructions.addAll(CodeGenerator.removeSpaceOnStack(currentST
+                .getReturnOffsetSize()));
         instructions.add(new BaseInstruction(Ins.MOV, Register.R0,
                 availableRegisters.get(0)));
         instructions.add(new BaseInstruction(Ins.POP, new RegList(Register

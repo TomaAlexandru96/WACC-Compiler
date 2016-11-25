@@ -7,6 +7,7 @@ import symobjects.SymbolTable;
 import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.operands.Register;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +66,8 @@ public abstract class Node<T extends ParserRuleContext> {
     }
 
     public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
-                                                        List<Register> availableRegisters) {
+                                                  List<Register>
+                                                          availableRegisters) {
         return new ArrayList<>();
     }
 

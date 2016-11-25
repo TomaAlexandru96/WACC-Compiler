@@ -9,13 +9,16 @@ public class BaseInstruction implements Instruction {
     private Ins instr;
 
     /**
-     * BaseInstruction is class which deals with all possible instructions defined
+     * BaseInstruction is class which deals with all possible instructions
+     * defined
      * for WACC (Example: ADD, ADDS, BEQ, BL, CMP, LDR, etc.)
+     *
      * @param instr name
-     * @param ops - optional list of operands (Example: immediate operand, constants, etc.)
+     * @param ops   - optional list of operands (Example: immediate operand,
+     *              constants, etc.)
      */
     public BaseInstruction(Ins instr, Operand... ops) {
-        assert (ops.length >= 1): "BaseInstruction needs at least 1 operand";
+        assert (ops.length >= 1) : "BaseInstruction needs at least 1 operand";
         this.ops = ops;
         this.instr = instr;
     }
@@ -23,7 +26,8 @@ public class BaseInstruction implements Instruction {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\t").append(String.format(INSTRUCTION_NAME_FORMAT, instr.toString()));
+        sb.append("\t").append(String.format(INSTRUCTION_NAME_FORMAT, instr
+                .toString()));
 
         for (int i = 0; i < ops.length - 1; i++) {
             sb.append(ops[i].toString()).append(", ");

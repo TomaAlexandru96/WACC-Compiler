@@ -16,7 +16,7 @@ public class ThrowOverflowError extends LibFunc {
     public static final String FUNC_NAME = "lib_throw_overflow_error";
     public static final String ERROR_MESSAGE
             = "OverflowError: the result is too small/large " +
-              "to store in a 4-byte signed-integer.\\n\\0";
+            "to store in a 4-byte signed-integer.\\n\\0";
     private final String ERROR_MESSAGE_LOCATION;
 
     /**
@@ -32,8 +32,9 @@ public class ThrowOverflowError extends LibFunc {
 
     /**
      * lib_throw_overflow_error:
-     *		LDR r0, =msg_2
-     *		BL p_throw_runtime_error
+     * LDR r0, =msg_2
+     * BL p_throw_runtime_error
+     *
      * @return list of instructions for throw_overflow_error label
      */
     @Override

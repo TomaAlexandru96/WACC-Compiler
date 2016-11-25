@@ -30,20 +30,20 @@ public class BinOpNode extends ExprNode<WACCParser.ExprContext> {
     private String operator;
     private static final Map<String, TypeObj> returnType = new
             HashMap<String, TypeObj>() {{
-        put("*", new IntObj());
-        put("/", new IntObj());
-        put("%", new IntObj());
-        put("+", new IntObj());
-        put("-", new IntObj());
-        put(">", new BoolObj());
-        put(">=", new BoolObj());
-        put("<", new BoolObj());
-        put("<=", new BoolObj());
-        put("==", new BoolObj());
-        put("!=", new BoolObj());
-        put("&&", new BoolObj());
-        put("||", new BoolObj());
-    }};
+                put("*", new IntObj());
+                put("/", new IntObj());
+                put("%", new IntObj());
+                put("+", new IntObj());
+                put("-", new IntObj());
+                put(">", new BoolObj());
+                put(">=", new BoolObj());
+                put("<", new BoolObj());
+                put("<=", new BoolObj());
+                put("==", new BoolObj());
+                put("!=", new BoolObj());
+                put("&&", new BoolObj());
+                put("||", new BoolObj());
+            }};
 
     private static final Map<String, List<Class<? extends TypeObj>>>
             operatorType = new HashMap<String, List<Class<? extends
@@ -87,7 +87,8 @@ public class BinOpNode extends ExprNode<WACCParser.ExprContext> {
 
         if (!lhsType.equals(rhsType)) {
             addSemanticError(CompileTimeError.INCOMPATIBLE_TYPE, lhs.getCtx()
-                    .getText(), lhsType.toString(), rhs.getCtx().getText(),
+                            .getText(), lhsType.toString(), rhs.getCtx()
+                            .getText(),
                     rhsType.toString());
             return;
         }
@@ -102,25 +103,33 @@ public class BinOpNode extends ExprNode<WACCParser.ExprContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
 
         Register lhsR = availableRegisters.get(0);
         Register rhsR = availableRegisters.get(1);
 
         List<Instruction> instructions = new LinkedList<Instruction>() {{
 
-            boolean lhsFirst = lhs instanceof ParenthesisNode && !(rhs instanceof ParenthesisNode);
-            boolean rhsFirst = rhs instanceof ParenthesisNode && !(lhs instanceof ParenthesisNode);
+            boolean lhsFirst = lhs instanceof ParenthesisNode && !(rhs
+                    instanceof ParenthesisNode);
+            boolean rhsFirst = rhs instanceof ParenthesisNode && !(lhs
+                    instanceof ParenthesisNode);
 
-            if(lhsFirst || (lhs.getWeight() >= rhs.getWeight() && !rhsFirst)) {
-                addAll(lhs.generateInstructions(codeGenRef, availableRegisters));
-                List<Register> availableRhs = availableRegisters.stream().skip(1).collect(Collectors.toList());
+            if (lhsFirst || (lhs.getWeight() >= rhs.getWeight() && !rhsFirst)) {
+                addAll(lhs.generateInstructions(codeGenRef,
+                        availableRegisters));
+                List<Register> availableRhs = availableRegisters.stream()
+                        .skip(1).collect(Collectors.toList());
                 addAll(rhs.generateInstructions(codeGenRef, availableRhs));
             } else {
-                List<Register> availableTemp = availableRegisters.stream().skip(1).collect(Collectors.toList());
+                List<Register> availableTemp = availableRegisters.stream()
+                        .skip(1).collect(Collectors.toList());
                 availableTemp.add(1, lhsR);
                 addAll(rhs.generateInstructions(codeGenRef, availableTemp));
-                availableTemp = availableTemp.stream().skip(1).collect(Collectors.toList());
+                availableTemp = availableTemp.stream().skip(1).collect
+                        (Collectors.toList());
                 addAll(lhs.generateInstructions(codeGenRef, availableTemp));
             }
         }};
@@ -128,68 +137,98 @@ public class BinOpNode extends ExprNode<WACCParser.ExprContext> {
         switch (operator) {
             case "*":
                 codeGenRef.useLibFunc(ThrowOverflowError.class);
-                instructions.add(new BaseInstruction(Ins.SMULL, lhsR, rhsR, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.CMP, rhsR, lhsR, new ShiftOp(Ins.ASR, new Offset(31))));
-                instructions.add(new BaseInstruction(Ins.BLNE, new LabelOp(ThrowOverflowError.FUNC_NAME)));
+                instructions.add(new BaseInstruction(Ins.SMULL, lhsR, rhsR,
+                        lhsR, rhsR));
+                instructions.add(new BaseInstruction(Ins.CMP, rhsR, lhsR, new
+                        ShiftOp(Ins.ASR, new Offset(31))));
+                instructions.add(new BaseInstruction(Ins.BLNE, new LabelOp
+                        (ThrowOverflowError.FUNC_NAME)));
                 break;
             case "/":
                 codeGenRef.useLibFunc(CheckDivideByZero.class);
-                instructions.add(new BaseInstruction(Ins.MOV, Register.R0, lhsR));
-                instructions.add(new BaseInstruction(Ins.MOV, Register.R1, rhsR));
-                instructions.add(new BaseInstruction(Ins.BL, new LabelOp(CheckDivideByZero.FUNC_NAME)));
-                instructions.add(new BaseInstruction(Ins.BL, new LabelOp("__aeabi_idiv")));
-                instructions.add(new BaseInstruction(Ins.MOV, lhsR, Register.R0));
+                instructions.add(new BaseInstruction(Ins.MOV, Register.R0,
+                        lhsR));
+                instructions.add(new BaseInstruction(Ins.MOV, Register.R1,
+                        rhsR));
+                instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                        (CheckDivideByZero.FUNC_NAME)));
+                instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                        ("__aeabi_idiv")));
+                instructions.add(new BaseInstruction(Ins.MOV, lhsR, Register
+                        .R0));
                 break;
             case "%":
                 codeGenRef.useLibFunc(CheckDivideByZero.class);
-                instructions.add(new BaseInstruction(Ins.MOV, Register.R0, lhsR));
-                instructions.add(new BaseInstruction(Ins.MOV, Register.R1, rhsR));
-                instructions.add(new BaseInstruction(Ins.BL, new LabelOp(CheckDivideByZero.FUNC_NAME)));
-                instructions.add(new BaseInstruction(Ins.BL, new LabelOp("__aeabi_idivmod")));
-                instructions.add(new BaseInstruction(Ins.MOV, lhsR, Register.R1));
+                instructions.add(new BaseInstruction(Ins.MOV, Register.R0,
+                        lhsR));
+                instructions.add(new BaseInstruction(Ins.MOV, Register.R1,
+                        rhsR));
+                instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                        (CheckDivideByZero.FUNC_NAME)));
+                instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                        ("__aeabi_idivmod")));
+                instructions.add(new BaseInstruction(Ins.MOV, lhsR, Register
+                        .R1));
                 break;
             case "+":
                 codeGenRef.useLibFunc(ThrowOverflowError.class);
-                instructions.add(new BaseInstruction(Ins.ADDS, lhsR, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.BLVS, new LabelOp(ThrowOverflowError.FUNC_NAME)));
+                instructions.add(new BaseInstruction(Ins.ADDS, lhsR, lhsR,
+                        rhsR));
+                instructions.add(new BaseInstruction(Ins.BLVS, new LabelOp
+                        (ThrowOverflowError.FUNC_NAME)));
                 break;
             case "-":
                 codeGenRef.useLibFunc(ThrowOverflowError.class);
-                instructions.add(new BaseInstruction(Ins.SUBS, lhsR, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.BLVS, new LabelOp(ThrowOverflowError.FUNC_NAME)));
+                instructions.add(new BaseInstruction(Ins.SUBS, lhsR, lhsR,
+                        rhsR));
+                instructions.add(new BaseInstruction(Ins.BLVS, new LabelOp
+                        (ThrowOverflowError.FUNC_NAME)));
                 break;
             case ">":
                 instructions.add(new BaseInstruction(Ins.CMP, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.MOVGT, lhsR, new Offset(1)));
-                instructions.add(new BaseInstruction(Ins.MOVLE, lhsR, new Offset(0)));
+                instructions.add(new BaseInstruction(Ins.MOVGT, lhsR, new
+                        Offset(1)));
+                instructions.add(new BaseInstruction(Ins.MOVLE, lhsR, new
+                        Offset(0)));
                 break;
             case ">=":
                 instructions.add(new BaseInstruction(Ins.CMP, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.MOVGE, lhsR, new Offset(1)));
-                instructions.add(new BaseInstruction(Ins.MOVLT, lhsR, new Offset(0)));
+                instructions.add(new BaseInstruction(Ins.MOVGE, lhsR, new
+                        Offset(1)));
+                instructions.add(new BaseInstruction(Ins.MOVLT, lhsR, new
+                        Offset(0)));
                 break;
             case "<":
                 instructions.add(new BaseInstruction(Ins.CMP, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.MOVLT, lhsR, new Offset(1)));
-                instructions.add(new BaseInstruction(Ins.MOVGE, lhsR, new Offset(0)));
+                instructions.add(new BaseInstruction(Ins.MOVLT, lhsR, new
+                        Offset(1)));
+                instructions.add(new BaseInstruction(Ins.MOVGE, lhsR, new
+                        Offset(0)));
                 break;
             case "<=":
                 instructions.add(new BaseInstruction(Ins.CMP, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.MOVLE, lhsR, new Offset(1)));
-                instructions.add(new BaseInstruction(Ins.MOVGT, lhsR, new Offset(0)));
+                instructions.add(new BaseInstruction(Ins.MOVLE, lhsR, new
+                        Offset(1)));
+                instructions.add(new BaseInstruction(Ins.MOVGT, lhsR, new
+                        Offset(0)));
                 break;
             case "==":
                 instructions.add(new BaseInstruction(Ins.CMP, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.MOVEQ, lhsR, new Offset(1)));
-                instructions.add(new BaseInstruction(Ins.MOVNE, lhsR, new Offset(0)));
+                instructions.add(new BaseInstruction(Ins.MOVEQ, lhsR, new
+                        Offset(1)));
+                instructions.add(new BaseInstruction(Ins.MOVNE, lhsR, new
+                        Offset(0)));
                 break;
             case "!=":
                 instructions.add(new BaseInstruction(Ins.CMP, lhsR, rhsR));
-                instructions.add(new BaseInstruction(Ins.MOVNE, lhsR, new Offset(1)));
-                instructions.add(new BaseInstruction(Ins.MOVEQ, lhsR, new Offset(0)));
+                instructions.add(new BaseInstruction(Ins.MOVNE, lhsR, new
+                        Offset(1)));
+                instructions.add(new BaseInstruction(Ins.MOVEQ, lhsR, new
+                        Offset(0)));
                 break;
             case "&&":
-                instructions.add(new BaseInstruction(Ins.AND, lhsR, lhsR, rhsR));
+                instructions.add(new BaseInstruction(Ins.AND, lhsR, lhsR,
+                        rhsR));
                 break;
             case "||":
                 instructions.add(new BaseInstruction(Ins.ORR, lhsR, lhsR, rhsR));

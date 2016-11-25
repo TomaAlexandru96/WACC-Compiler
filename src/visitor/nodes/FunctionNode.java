@@ -93,7 +93,9 @@ public class FunctionNode extends Node<WACCParser.FuncContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> ins = new ArrayList<>();
 
         ins.add(new LabelIns("f_" + name));

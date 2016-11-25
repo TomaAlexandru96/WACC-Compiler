@@ -63,12 +63,16 @@ public class PairElemNode extends Node<WACCParser.PairElemContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
 
-        instructions.addAll(CodeGenerator.getPairPointer(codeGenRef, availableRegisters, expr, ctx.FST() != null));
+        instructions.addAll(CodeGenerator.getPairPointer(codeGenRef,
+                availableRegisters, expr, ctx.FST() != null));
         Register ans = availableRegisters.get(0);
-        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type), ans, new StackLocation(ans)));
+        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type),
+                ans, new StackLocation(ans)));
 
         return instructions;
     }

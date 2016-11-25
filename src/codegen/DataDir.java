@@ -8,25 +8,26 @@ public class DataDir {
     /**
      * DataDir defines the messages at the top of the Assembly output.
      * One particular example:
-     *      .data
-     *
-     *      msg_0:
-     *          .word 45
-     *          .ascii "DivideByZeroError: divide or modulo by zero\n\0"
-     *      msg_1:
-     *          .word 3
-     *          .ascii "%d\0"
-     *      msg_2:
-     *          .word 5
-     *          .ascii "%.*s\"
-     *
-     *      .text
+     * .data
+     * <p>
+     * msg_0:
+     * .word 45
+     * .ascii "DivideByZeroError: divide or modulo by zero\n\0"
+     * msg_1:
+     * .word 3
+     * .ascii "%d\0"
+     * msg_2:
+     * .word 5
+     * .ascii "%.*s\"
+     * <p>
+     * .text
      */
     private int currentMessageNumber = 0;
     private ArrayList<String> messages = new ArrayList<>();
 
     /**
      * Adds a new error message to the list
+     *
      * @param message to be added (Example: OverflowError message)
      */
     public void put(String message) {
@@ -46,11 +47,12 @@ public class DataDir {
     public String toString() {
         StringBuilder sb = new StringBuilder(".data\n");
 
-        for(int i = 0; i < currentMessageNumber; i++) {
+        for (int i = 0; i < currentMessageNumber; i++) {
             String message = messages.get(i);
             int messageLength = message.length();
             messageLength -= message.chars().filter(c -> c == ('\\')).count();
-            sb.append("msg_").append(i).append(":\n\t.word ").append(messageLength)
+            sb.append("msg_").append(i).append(":\n\t.word ").append
+                    (messageLength)
                     .append("\n\t.ascii \"").append(message).append("\"\n");
         }
 

@@ -134,7 +134,8 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
-    public AssignRhsCallFuncNode visitAssignRhsCallFunc(@NotNull WACCParser.AssignRhsCallFuncContext ctx) {
+    public AssignRhsCallFuncNode visitAssignRhsCallFunc(@NotNull WACCParser
+            .AssignRhsCallFuncContext ctx) {
         List<ExprNode> args = ctx.expr().stream()
                 .map(e -> visitExprNodes(e))
                 .collect(Collectors.toList());
@@ -142,23 +143,29 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
-    public AssignRhsPairElemNode visitAssignRhsPairElem(@NotNull WACCParser.AssignRhsPairElemContext ctx) {
-        return new AssignRhsPairElemNode(currentST, ctx, visitPairElem(ctx.pairElem()));
+    public AssignRhsPairElemNode visitAssignRhsPairElem(@NotNull WACCParser
+            .AssignRhsPairElemContext ctx) {
+        return new AssignRhsPairElemNode(currentST, ctx, visitPairElem(ctx
+                .pairElem()));
     }
 
     @Override
-    public AssignRhsExprNode visitAssignRhsExpr(@NotNull WACCParser.AssignRhsExprContext ctx) {
-        return new AssignRhsExprNode(currentST, ctx, visitExprNodes(ctx.expr()));
+    public AssignRhsExprNode visitAssignRhsExpr(@NotNull WACCParser
+            .AssignRhsExprContext ctx) {
+        return new AssignRhsExprNode(currentST, ctx, visitExprNodes(ctx.expr
+                ()));
     }
 
     @Override
-    public AssignRhsNewPairNode visitAssignRhsNewPair(@NotNull WACCParser.AssignRhsNewPairContext ctx) {
+    public AssignRhsNewPairNode visitAssignRhsNewPair(@NotNull WACCParser
+            .AssignRhsNewPairContext ctx) {
         return new AssignRhsNewPairNode(currentST, ctx, visitExprNodes(ctx.expr
                 (0)), visitExprNodes(ctx.expr(1)));
     }
 
     @Override
-    public AssignRhsArrayLiteralNode visitAssignRhsArrayLiteral(@NotNull WACCParser.AssignRhsArrayLiteralContext ctx) {
+    public AssignRhsArrayLiteralNode visitAssignRhsArrayLiteral(
+            @NotNull WACCParser.AssignRhsArrayLiteralContext ctx) {
         List<ExprNode> exprNodes = ctx.expr().stream()
                 .map(e -> visitExprNodes(e))
                 .collect(Collectors.toList());
@@ -166,18 +173,23 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
-    public Node visitAssignLhsArrayElem(@NotNull WACCParser.AssignLhsArrayElemContext ctx) {
-        return new AssignLhsArrayElemNode(currentST, ctx, visitArrayElem(ctx.arrayElem()));
+    public Node visitAssignLhsArrayElem(@NotNull WACCParser
+            .AssignLhsArrayElemContext ctx) {
+        return new AssignLhsArrayElemNode(currentST, ctx, visitArrayElem(ctx
+                .arrayElem()));
     }
 
     @Override
-    public Node visitAssignLhsIdent(@NotNull WACCParser.AssignLhsIdentContext ctx) {
+    public Node visitAssignLhsIdent(@NotNull WACCParser.AssignLhsIdentContext
+                                            ctx) {
         return new AssignLhsIdentNode(currentST, ctx);
     }
 
     @Override
-    public Node visitAssignLhsPairElem(@NotNull WACCParser.AssignLhsPairElemContext ctx) {
-        return new AssignLhsPairElemNode(currentST, ctx, visitPairElem(ctx.pairElem()));
+    public Node visitAssignLhsPairElem(@NotNull WACCParser
+            .AssignLhsPairElemContext ctx) {
+        return new AssignLhsPairElemNode(currentST, ctx, visitPairElem(ctx
+                .pairElem()));
     }
 
     @Override
@@ -205,7 +217,8 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
 
     @Override
     public ReadNode visitReadStat(@NotNull WACCParser.ReadStatContext ctx) {
-        return new ReadNode(currentST, ctx, (AssignLhsNode) visit(ctx.assignLhs()));
+        return new ReadNode(currentST, ctx, (AssignLhsNode) visit(ctx
+                .assignLhs()));
     }
 
     @Override
@@ -226,7 +239,7 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
 
     @Override
     public BoolNode visitBoolLiteral(@NotNull WACCParser.BoolLiteralContext
-                                                 ctx) {
+                                             ctx) {
         return new BoolNode(currentST, ctx);
     }
 
@@ -237,19 +250,19 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
 
     @Override
     public CharNode visitCharLiteral(@NotNull WACCParser.CharLiteralContext
-                                                 ctx) {
+                                             ctx) {
         return new CharNode(currentST, ctx);
     }
 
     @Override
     public StringNode visitStrLiteral(@NotNull WACCParser.StrLiteralContext
-                                                  ctx) {
+                                              ctx) {
         return new StringNode(currentST, ctx);
     }
 
     @Override
     public PairNode visitPairLiteral(@NotNull WACCParser.PairLiteralContext
-                                                 ctx) {
+                                             ctx) {
         return new PairNode(currentST, ctx);
     }
 
@@ -272,7 +285,7 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
 
     @Override
     public BinOpNode visitBinAndExpr(@NotNull WACCParser.BinAndExprContext
-                                                 ctx) {
+                                             ctx) {
         ExprNode lhs = visitExprNodes(ctx.expr(0));
         ExprNode rhs = visitExprNodes(ctx.expr(1));
 
@@ -294,7 +307,7 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
 
     @Override
     public ExprNode visitLiteralExpr(@NotNull WACCParser.LiteralExprContext
-                                                 ctx) {
+                                             ctx) {
         return (ExprNode) visit(ctx.literal());
     }
 
@@ -308,7 +321,7 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
 
     @Override
     public BinOpNode visitBinCompExpr(@NotNull WACCParser.BinCompExprContext
-                                                  ctx) {
+                                              ctx) {
         ExprNode lhs = visitExprNodes(ctx.expr(0));
         ExprNode rhs = visitExprNodes(ctx.expr(1));
 

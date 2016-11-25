@@ -23,9 +23,12 @@ public class PairNode extends LiteralNode<WACCParser.PairLiteralContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         return new LinkedList<Instruction>() {{
-            add(new BaseInstruction(Ins.getLdrInstruction(type), availableRegisters.get(0), new Immediate("0")));
+            add(new BaseInstruction(Ins.getLdrInstruction(type),
+                    availableRegisters.get(0), new Immediate("0")));
         }};
     }
 }

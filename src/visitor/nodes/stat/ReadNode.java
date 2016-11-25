@@ -48,13 +48,17 @@ public class ReadNode extends StatNode<WACCParser.ReadStatContext> {
     }
 
     private void check() {
-        if (!(lhs.getType() instanceof IntObj) && !(lhs.getType() instanceof CharObj)) {
-            addSemanticError(CompileTimeError.READ_ERROR, lhs.getType().toString());
+        if (!(lhs.getType() instanceof IntObj) && !(lhs.getType() instanceof
+                CharObj)) {
+            addSemanticError(CompileTimeError.READ_ERROR, lhs.getType()
+                    .toString());
         }
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
         Register reg = availableRegisters.get(0);
 
@@ -71,11 +75,13 @@ public class ReadNode extends StatNode<WACCParser.ReadStatContext> {
         int offset = currentST.lookupOffset(lhs.getIdent());
 
 
-        if(lhs instanceof AssignLhsIdentNode) {
+        if (lhs instanceof AssignLhsIdentNode) {
 
-            instructions.add(new BaseInstruction(Ins.ADD, reg, Register.SP, new Offset(offset)));
+            instructions.add(new BaseInstruction(Ins.ADD, reg, Register.SP,
+                    new Offset(offset)));
         } else {
-            instructions.addAll(lhs.generateInstructions(codeGenRef, availableRegisters));
+            instructions.addAll(lhs.generateInstructions(codeGenRef,
+                    availableRegisters));
         }
         instructions.add(new BaseInstruction(Ins.MOV, Register
                 .R0, reg));

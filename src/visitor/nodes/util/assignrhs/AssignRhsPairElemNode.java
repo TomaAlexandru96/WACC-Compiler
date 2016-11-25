@@ -11,11 +11,13 @@ import visitor.nodes.util.PairElemNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignRhsPairElemNode extends AssignRhsNode<WACCParser.AssignRhsPairElemContext> {
+public class AssignRhsPairElemNode extends AssignRhsNode<WACCParser
+        .AssignRhsPairElemContext> {
     private PairElemNode pNode;
 
     // assignRhs: pairElem
-    public AssignRhsPairElemNode(SymbolTable currentST, WACCParser.AssignRhsPairElemContext
+    public AssignRhsPairElemNode(SymbolTable currentST, WACCParser
+            .AssignRhsPairElemContext
             ctx, PairElemNode pairElem) {
         super(currentST, ctx);
 
@@ -30,7 +32,9 @@ public class AssignRhsPairElemNode extends AssignRhsNode<WACCParser.AssignRhsPai
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         return pNode.generateInstructions(codeGenRef, availableRegisters);
     }
 }
