@@ -5,7 +5,6 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.instructions.LabelIns;
 import codegen.operands.*;
 import symobjects.SymbolTable;
 import symobjects.identifierobj.typeobj.PairObj;

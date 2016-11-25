@@ -1,6 +1,5 @@
 package symobjects.identifierobj.typeobj.scalarobj;
 
-import symobjects.SymbolTable;
 import symobjects.identifierobj.typeobj.GenericObj;
 import symobjects.identifierobj.typeobj.ScalarObj;
 

@@ -8,7 +8,6 @@ import symobjects.SymbolTable;
 import visitor.nodes.util.AssignRhsNode;
 import visitor.nodes.util.PairElemNode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AssignRhsPairElemNode extends AssignRhsNode<WACCParser

@@ -1,6 +1,5 @@
 package codegen.operands;
 
-import codegen.Instruction;
 import codegen.Operand;
 import codegen.instructions.Ins;
 

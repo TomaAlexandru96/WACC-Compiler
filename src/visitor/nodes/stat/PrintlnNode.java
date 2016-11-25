@@ -18,7 +18,6 @@ import visitor.nodes.ExprNode;
 import visitor.nodes.StatNode;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PrintlnNode extends StatNode<WACCParser.PrintlnStatContext> {

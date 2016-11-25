@@ -5,9 +5,6 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.libfuncs.runtimeerror.CheckArrayBounds;
-import codegen.operands.LabelOp;
-import codegen.operands.Offset;
 import codegen.operands.Register;
 import codegen.operands.StackLocation;
 import main.CompileTimeError;
@@ -19,7 +16,6 @@ import visitor.nodes.ExprNode;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ArrayElementNode extends ExprNode<WACCParser.ArrayElemContext> {
 

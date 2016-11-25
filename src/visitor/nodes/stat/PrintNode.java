@@ -3,13 +3,10 @@ package visitor.nodes.stat;
 import antlr.WACCParser;
 import codegen.CodeGenerator;
 import codegen.Instruction;
-import codegen.LibFunc;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
 import codegen.libfuncs.io.*;
-import codegen.operands.Immediate;
 import codegen.operands.LabelOp;
-import codegen.operands.Offset;
 import codegen.operands.Register;
 import symobjects.SymbolTable;
 import symobjects.identifierobj.TypeObj;
@@ -19,10 +16,8 @@ import symobjects.identifierobj.typeobj.scalarobj.CharObj;
 import symobjects.identifierobj.typeobj.scalarobj.IntObj;
 import visitor.nodes.ExprNode;
 import visitor.nodes.StatNode;
-import visitor.nodes.expr.literal.IntNode;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PrintNode extends StatNode<WACCParser.PrintStatContext> {

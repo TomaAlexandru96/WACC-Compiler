@@ -4,8 +4,6 @@ import symobjects.IdentifierObj;
 import symobjects.SymbolTable;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class FunctionObj extends IdentifierObj {
     private TypeObj returnType;
