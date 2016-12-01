@@ -5,11 +5,9 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.instructions.LabelIns;
 import codegen.libfuncs.runtimeerror.FreeArray;
 import codegen.libfuncs.runtimeerror.FreePair;
 import codegen.operands.LabelOp;
-import codegen.operands.Offset;
 import codegen.operands.Register;
 import main.CompileTimeError;
 import symobjects.SymbolTable;
@@ -54,13 +52,17 @@ public class FreeNode extends StatNode<WACCParser.FreeStatContext> {
                 : "Available Registers should always have at least one element";
         List<Instruction> instructions = new ArrayList<>();
 
-        instructions.addAll(exprNode.generateInstructions(codeGenRef, availableRegisters));
-        instructions.add(new BaseInstruction(Ins.MOV, Register.R0, availableRegisters.get(0)));
-        if(exprNode.getType() instanceof ArrayObj) {
-            instructions.add(new BaseInstruction(Ins.BL, new LabelOp(FreeArray.FUNC_NAME)));
+        instructions.addAll(exprNode.generateInstructions(codeGenRef,
+                availableRegisters));
+        instructions.add(new BaseInstruction(Ins.MOV, Register.R0,
+                availableRegisters.get(0)));
+        if (exprNode.getType() instanceof ArrayObj) {
+            instructions.add(new BaseInstruction(Ins.BL, new LabelOp
+                    (FreeArray.FUNC_NAME)));
             codeGenRef.useLibFunc(FreeArray.class);
         } else {
-            instructions.add(new BaseInstruction(Ins.BL, new LabelOp(FreePair.FUNC_NAME)));
+            instructions.add(new BaseInstruction(Ins.BL, new LabelOp(FreePair
+                    .FUNC_NAME)));
             codeGenRef.useLibFunc(FreePair.class);
         }
         return instructions;

@@ -5,7 +5,6 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.operands.Immediate;
 import codegen.operands.Offset;
 import codegen.operands.Register;
 import symobjects.SymbolTable;
@@ -25,9 +24,12 @@ public class CharNode extends LiteralNode<WACCParser.CharLiteralContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         return new LinkedList<Instruction>() {{
-            add(new BaseInstruction(Ins.MOV, availableRegisters.get(0), new Offset(value)));
+            add(new BaseInstruction(Ins.MOV, availableRegisters.get(0), new
+                    Offset(value)));
         }};
     }
 }

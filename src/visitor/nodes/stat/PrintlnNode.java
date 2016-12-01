@@ -18,7 +18,6 @@ import visitor.nodes.ExprNode;
 import visitor.nodes.StatNode;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PrintlnNode extends StatNode<WACCParser.PrintlnStatContext> {
@@ -36,13 +35,16 @@ public class PrintlnNode extends StatNode<WACCParser.PrintlnStatContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
-                List<Instruction> instructions = new ArrayList<>();
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
+        List<Instruction> instructions = new ArrayList<>();
         TypeObj exprType = exprNode.getType();
         BaseInstruction branch = null;
-        instructions.addAll(exprNode.generateInstructions(codeGenRef, availableRegisters));
+        instructions.addAll(exprNode.generateInstructions(codeGenRef,
+                availableRegisters));
         instructions.add(new BaseInstruction(Ins.MOV, Register.R0,
-                    availableRegisters.get(0)));
+                availableRegisters.get(0)));
         if (exprType instanceof IntObj) {
             branch = new BaseInstruction(Ins.BL,
                     new LabelOp(Printable.FUNC_NAME_PRINT_INT));
@@ -50,10 +52,11 @@ public class PrintlnNode extends StatNode<WACCParser.PrintlnStatContext> {
         } else if (exprType instanceof CharObj) {
             branch = new BaseInstruction(Ins.BL, new LabelOp("putchar"));
         } else if (exprType instanceof BoolObj) {
-            branch  = new BaseInstruction(Ins.BL, new LabelOp
+            branch = new BaseInstruction(Ins.BL, new LabelOp
                     (PrintBool.FUNC_NAME));
             codeGenRef.useLibFunc(PrintBool.class);
-        } else if (exprType instanceof ArrayObj && ((ArrayObj)exprType).isString()) {
+        } else if (exprType instanceof ArrayObj && ((ArrayObj) exprType)
+                .isString()) {
             branch = new BaseInstruction(Ins.BL, new LabelOp
                     (PrintString.FUNC_NAME));
             codeGenRef.useLibFunc(PrintString.class);
@@ -63,7 +66,8 @@ public class PrintlnNode extends StatNode<WACCParser.PrintlnStatContext> {
             codeGenRef.useLibFunc(PrintReference.class);
         }
         instructions.add(branch);
-        instructions.add(new BaseInstruction(Ins.BL, new LabelOp(Println.FUNC_NAME)));
+        instructions.add(new BaseInstruction(Ins.BL, new LabelOp(Println
+                .FUNC_NAME)));
         codeGenRef.useLibFunc(Println.class);
         return instructions;
     }

@@ -5,7 +5,6 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.instructions.LabelIns;
 import codegen.operands.*;
 import symobjects.SymbolTable;
 import symobjects.identifierobj.typeobj.PairObj;
@@ -16,12 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AssignRhsNewPairNode extends AssignRhsNode<WACCParser.AssignRhsNewPairContext> {
+public class AssignRhsNewPairNode extends AssignRhsNode<WACCParser
+        .AssignRhsNewPairContext> {
     private ExprNode firstExpr;
     private ExprNode secondExpr;
 
     // assignRhs: NEWPAIR OPEN_PARENTHESES expr COMMA expr CLOSE_PARENTHESES
-    public AssignRhsNewPairNode(SymbolTable currentST, WACCParser.AssignRhsNewPairContext
+    public AssignRhsNewPairNode(SymbolTable currentST, WACCParser
+            .AssignRhsNewPairContext
             ctx, ExprNode first, ExprNode second) {
         super(currentST, ctx);
 
@@ -37,29 +38,41 @@ public class AssignRhsNewPairNode extends AssignRhsNode<WACCParser.AssignRhsNewP
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
 
-        Register first  = availableRegisters.get(0);
+        Register first = availableRegisters.get(0);
         Register second = availableRegisters.get(1);
-        List<Register> newAvailableRegisters = availableRegisters.stream().skip(1).collect(Collectors.toList());
+        List<Register> newAvailableRegisters = availableRegisters.stream()
+                .skip(1).collect(Collectors.toList());
 
-        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new Immediate(8)));
+        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new
+                Immediate(8)));
         instructions.add(new BaseInstruction(Ins.BL, new LabelOp("malloc")));
         instructions.add(new BaseInstruction(Ins.MOV, first, Register.R0));
-        instructions.addAll(firstExpr.generateInstructions(codeGenRef, newAvailableRegisters));
-        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new Immediate(firstExpr.getType().getSize())));
+        instructions.addAll(firstExpr.generateInstructions(codeGenRef,
+                newAvailableRegisters));
+        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new
+                Immediate(firstExpr.getType().getSize())));
         instructions.add(new BaseInstruction(Ins.BL, new LabelOp("malloc")));
-        instructions.add(new BaseInstruction(Ins.getStrInstruciton(firstExpr.getType()),
+        instructions.add(new BaseInstruction(Ins.getStrInstruciton(firstExpr
+                .getType()),
                 second, new StackLocation(Register.R0)));
-        instructions.add(new BaseInstruction(Ins.STR, Register.R0, new StackLocation(first)));
+        instructions.add(new BaseInstruction(Ins.STR, Register.R0, new
+                StackLocation(first)));
 
-        instructions.addAll(secondExpr.generateInstructions(codeGenRef, newAvailableRegisters));
-        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new Immediate(secondExpr.getType().getSize())));
+        instructions.addAll(secondExpr.generateInstructions(codeGenRef,
+                newAvailableRegisters));
+        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new
+                Immediate(secondExpr.getType().getSize())));
         instructions.add(new BaseInstruction(Ins.BL, new LabelOp("malloc")));
-        instructions.add(new BaseInstruction(Ins.getStrInstruciton(secondExpr.getType()),
+        instructions.add(new BaseInstruction(Ins.getStrInstruciton(secondExpr
+                .getType()),
                 second, new StackLocation(Register.R0)));
-        instructions.add(new BaseInstruction(Ins.STR, Register.R0, new StackLocation(first, new Offset(4))));
+        instructions.add(new BaseInstruction(Ins.STR, Register.R0, new
+                StackLocation(first, new Offset(4))));
 
         return instructions;
     }

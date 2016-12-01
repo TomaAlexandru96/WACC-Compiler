@@ -18,7 +18,7 @@ public class CompositionNode extends StatNode<WACCParser
 
     public CompositionNode(SymbolTable currentST, WACCParser
             .CompositionStatContext ctx, StatNode firstStatNode, StatNode
-            secondStatNode) {
+                                   secondStatNode) {
         super(currentST, ctx);
 
         if (firstStatNode.hasErrors() || secondStatNode.hasErrors()) {
@@ -39,9 +39,13 @@ public class CompositionNode extends StatNode<WACCParser
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
-        List<Instruction> firstStatInstructions = firstStatNode.generateInstructions(codeGenRef, availableRegisters);
-        List<Instruction> secondStatInstructions = secondStatNode.generateInstructions(codeGenRef, availableRegisters);
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
+        List<Instruction> firstStatInstructions = firstStatNode
+                .generateInstructions(codeGenRef, availableRegisters);
+        List<Instruction> secondStatInstructions = secondStatNode
+                .generateInstructions(codeGenRef, availableRegisters);
         firstStatInstructions.addAll(secondStatInstructions);
 
         return firstStatInstructions;

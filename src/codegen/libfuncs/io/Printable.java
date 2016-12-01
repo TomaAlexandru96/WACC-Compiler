@@ -35,14 +35,15 @@ public abstract class Printable extends LibFunc {
 
     /**
      * lib_print_int/reference:
-     *		PUSH {lr}
-     *		MOV r1, r0
-     *		LDR r0, =msg_0
-     *		ADD r0, r0, #4
-     *		BL printf
-     *		MOV r0, #0
-     *		BL fflush
-     *		POP {pc}
+     * PUSH {lr}
+     * MOV r1, r0
+     * LDR r0, =msg_0
+     * ADD r0, r0, #4
+     * BL printf
+     * MOV r0, #0
+     * BL fflush
+     * POP {pc}
+     *
      * @return list of instructions needed for the lib_print_int/reference label
      */
     @Override

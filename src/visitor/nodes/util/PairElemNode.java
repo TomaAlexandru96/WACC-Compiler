@@ -5,9 +5,6 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.libfuncs.runtimeerror.CheckNullPointer;
-import codegen.operands.LabelOp;
-import codegen.operands.Offset;
 import codegen.operands.Register;
 import codegen.operands.StackLocation;
 import main.CompileTimeError;
@@ -63,12 +60,16 @@ public class PairElemNode extends Node<WACCParser.PairElemContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
 
-        instructions.addAll(CodeGenerator.getPairPointer(codeGenRef, availableRegisters, expr, ctx.FST() != null));
+        instructions.addAll(CodeGenerator.getPairPointer(codeGenRef,
+                availableRegisters, expr, ctx.FST() != null));
         Register ans = availableRegisters.get(0);
-        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type), ans, new StackLocation(ans)));
+        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type),
+                ans, new StackLocation(ans)));
 
         return instructions;
     }

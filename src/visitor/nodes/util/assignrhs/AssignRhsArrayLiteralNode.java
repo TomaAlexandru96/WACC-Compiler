@@ -18,11 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AssignRhsArrayLiteralNode extends AssignRhsNode<WACCParser.AssignRhsArrayLiteralContext> {
+public class AssignRhsArrayLiteralNode extends AssignRhsNode<WACCParser
+        .AssignRhsArrayLiteralContext> {
     private List<ExprNode> args;
 
     // assignRhs: arrayLiteral
-    public AssignRhsArrayLiteralNode(SymbolTable currentST, WACCParser.AssignRhsArrayLiteralContext
+    public AssignRhsArrayLiteralNode(SymbolTable currentST, WACCParser
+            .AssignRhsArrayLiteralContext
             ctx, List<ExprNode> arrayArgs) {
         super(currentST, ctx);
 
@@ -51,30 +53,38 @@ public class AssignRhsArrayLiteralNode extends AssignRhsNode<WACCParser.AssignRh
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
-        assert (type instanceof ArrayObj): "Type should always be an ArrayObj";
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
+        assert (type instanceof ArrayObj) : "Type should always be an ArrayObj";
         List<Instruction> instructions = new ArrayList<>();
 
         ArrayObj arrayType = (ArrayObj) type;
         Operand o1 = availableRegisters.get(0);
         Operand o2 = availableRegisters.get(1);
-        List<Register> newAvailableRegisters = availableRegisters.stream().skip(1).collect(Collectors.toList());
+        List<Register> newAvailableRegisters = availableRegisters.stream()
+                .skip(1).collect(Collectors.toList());
 
-        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new Immediate(arrayType.getHeapSize())));
+        instructions.add(new BaseInstruction(Ins.LDR, Register.R0, new
+                Immediate(arrayType.getHeapSize())));
         instructions.add(new BaseInstruction(Ins.BL, new LabelOp("malloc")));
         instructions.add(new BaseInstruction(Ins.MOV, o1, Register.R0));
 
         int arrayIndex = 4;
         for (ExprNode arg : args) {
-            instructions.addAll(arg.generateInstructions(codeGenRef, newAvailableRegisters));
-            instructions.add(new BaseInstruction(Ins.getStrInstruciton(arg.getType()), o2,
+            instructions.addAll(arg.generateInstructions(codeGenRef,
+                    newAvailableRegisters));
+            instructions.add(new BaseInstruction(Ins.getStrInstruciton(arg
+                    .getType()), o2,
                     new StackLocation(o1, new Offset(arrayIndex))));
             arrayIndex += arrayType.getType().getSize();
         }
 
         // load second operand with array size and store it
-        instructions.add(new BaseInstruction(Ins.LDR, o2, new Immediate(arrayType.getElementsNo())));
-        instructions.add(new BaseInstruction(Ins.STR, o2, new StackLocation(o1)));
+        instructions.add(new BaseInstruction(Ins.LDR, o2, new Immediate
+                (arrayType.getElementsNo())));
+        instructions.add(new BaseInstruction(Ins.STR, o2, new StackLocation
+                (o1)));
 
         return instructions;
     }

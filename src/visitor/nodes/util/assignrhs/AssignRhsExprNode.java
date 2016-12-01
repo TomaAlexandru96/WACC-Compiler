@@ -10,10 +10,12 @@ import visitor.nodes.util.AssignRhsNode;
 
 import java.util.List;
 
-public class AssignRhsExprNode extends AssignRhsNode<WACCParser.AssignRhsExprContext> {
+public class AssignRhsExprNode extends AssignRhsNode<WACCParser
+        .AssignRhsExprContext> {
     private ExprNode rhs;
 
-    public AssignRhsExprNode(SymbolTable currentST, WACCParser.AssignRhsExprContext ctx, ExprNode rhs) {
+    public AssignRhsExprNode(SymbolTable currentST, WACCParser
+            .AssignRhsExprContext ctx, ExprNode rhs) {
         super(currentST, ctx);
 
         this.rhs = rhs;
@@ -27,7 +29,9 @@ public class AssignRhsExprNode extends AssignRhsNode<WACCParser.AssignRhsExprCon
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         return rhs.generateInstructions(codeGenRef, availableRegisters);
     }
 }

@@ -51,7 +51,9 @@ public class WhileNode extends StatNode<WACCParser.WhileStatContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
 
         String label1 = codeGenRef.getNextLabel();
@@ -60,12 +62,16 @@ public class WhileNode extends StatNode<WACCParser.WhileStatContext> {
         instructions.add(new BaseInstruction(Ins.B, new LabelOp(label1)));
         instructions.add(new LabelIns(label2));
 
-        List<Instruction> inBetween = body.generateInstructions(codeGenRef, availableRegisters);
-        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore(currentST, inBetween));
+        List<Instruction> inBetween = body.generateInstructions(codeGenRef,
+                availableRegisters);
+        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore
+                (currentST, inBetween));
 
         instructions.add(new LabelIns(label1));
-        instructions.addAll(condition.generateInstructions(codeGenRef, availableRegisters));
-        instructions.add(new BaseInstruction(Ins.CMP, availableRegisters.get(0), new Offset(1)));
+        instructions.addAll(condition.generateInstructions(codeGenRef,
+                availableRegisters));
+        instructions.add(new BaseInstruction(Ins.CMP, availableRegisters.get
+                (0), new Offset(1)));
         instructions.add(new BaseInstruction(Ins.BEQ, new LabelOp(label2)));
 
         return instructions;

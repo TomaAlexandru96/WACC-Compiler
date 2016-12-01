@@ -24,6 +24,7 @@ public class SymbolTable {
 
     /**
      * Search in the current scope for the IdentifierObj
+     *
      * @param key
      * @return IdentifierObj
      */
@@ -39,12 +40,13 @@ public class SymbolTable {
 
     /**
      * Search in current and outer scopes for the IdentifierObj
+     *
      * @param key
      * @return IdentifierObj
      */
     public <T> T lookupAll(String key, Class<T> classType) {
         SymbolTable current = this;
-        while(current != null) {
+        while (current != null) {
             T obj = current.lookup(key, classType);
             if (obj != null) {
                 return obj;
@@ -56,6 +58,7 @@ public class SymbolTable {
 
     /**
      * Returns the parent SymbolTable
+     *
      * @return SymbolTable
      */
     public SymbolTable getParent() {
@@ -80,9 +83,10 @@ public class SymbolTable {
     }
 
     public int lookupOffset(String key) {
-        if(initialised.contains(key)) {
+        if (initialised.contains(key)) {
             VariableObj vObj = lookup(key, VariableObj.class);
-            assert (parent != null || vObj != null) : "parent != null || vObj != null";
+            assert (parent != null || vObj != null) : "parent != null || vObj" +
+                    " != null";
             if (vObj != null) {
                 return extraSpace + vObj.getOffset();
             }
@@ -107,19 +111,20 @@ public class SymbolTable {
     }
 
     public int getReturnOffsetSize() {
-        if(map.containsKey(LR_SENTINEL)) {
+        if (map.containsKey(LR_SENTINEL)) {
             int sum = 0;
-            for(Map.Entry<String, IdentifierObj> entry : map.entrySet()) {
-                if(entry.getValue() instanceof VariableObj && !entry.getKey().equals(LR_SENTINEL)
-                        &&!isParam(entry.getKey())) {
+            for (Map.Entry<String, IdentifierObj> entry : map.entrySet()) {
+                if (entry.getValue() instanceof VariableObj && !entry.getKey
+                        ().equals(LR_SENTINEL)
+                        && !isParam(entry.getKey())) {
                     sum += ((VariableObj) entry.getValue()).getType().getSize();
                 }
             }
             return sum;
         } else {
             int sum = 0;
-            for(IdentifierObj obj : map.values()) {
-                if(obj instanceof VariableObj) {
+            for (IdentifierObj obj : map.values()) {
+                if (obj instanceof VariableObj) {
                     sum += ((VariableObj) obj).getType().getSize();
                 }
             }

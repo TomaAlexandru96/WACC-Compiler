@@ -5,7 +5,8 @@ import symobjects.SymbolTable;
 import symobjects.identifierobj.TypeObj;
 import visitor.Node;
 
-public abstract class AssignLhsNode<T extends ParserRuleContext> extends Node<T> {
+public abstract class AssignLhsNode<T extends ParserRuleContext> extends
+        Node<T> {
     protected TypeObj type;
     protected String ident;
 

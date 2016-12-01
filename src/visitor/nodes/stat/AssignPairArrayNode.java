@@ -49,31 +49,40 @@ public class AssignPairArrayNode extends StatNode<WACCParser
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new ArrayList<>();
         Register first = availableRegisters.get(0);
         StackLocation stackLocation;
 
         if (lhs instanceof AssignLhsIdentNode) {
-            String identName = ((WACCParser.AssignLhsIdentContext) lhs.getCtx()).IDENT().getText();
+            String identName = ((WACCParser.AssignLhsIdentContext) lhs.getCtx
+                    ()).IDENT().getText();
             int identOffset = currentST.lookupOffset(identName);
-            instructions.addAll(rhs.generateInstructions(codeGenRef, availableRegisters));
+            instructions.addAll(rhs.generateInstructions(codeGenRef,
+                    availableRegisters));
 
             if (identOffset == 0) {
                 stackLocation = new StackLocation(Register.SP);
             } else {
-                stackLocation = new StackLocation(Register.SP, new Offset(identOffset));
+                stackLocation = new StackLocation(Register.SP, new Offset
+                        (identOffset));
             }
         } else {
             Register second = availableRegisters.get(1);
 
-            instructions.addAll(rhs.generateInstructions(codeGenRef, availableRegisters));
-            List<Register> newAvailableRegisters = availableRegisters.stream().skip(1).collect(Collectors.toList());
-            instructions.addAll(lhs.generateInstructions(codeGenRef, newAvailableRegisters));
+            instructions.addAll(rhs.generateInstructions(codeGenRef,
+                    availableRegisters));
+            List<Register> newAvailableRegisters = availableRegisters.stream
+                    ().skip(1).collect(Collectors.toList());
+            instructions.addAll(lhs.generateInstructions(codeGenRef,
+                    newAvailableRegisters));
             stackLocation = new StackLocation(second);
         }
 
-        instructions.add(new BaseInstruction(Ins.getStrInstruciton(rhs.getType()), first, stackLocation));
+        instructions.add(new BaseInstruction(Ins.getStrInstruciton(rhs
+                .getType()), first, stackLocation));
 
         return instructions;
     }

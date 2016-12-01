@@ -31,28 +31,29 @@ public class FreeArray extends LibFunc {
 
     /**
      * lib_free_pair:
-     *   PUSH {lr}
-     *   CMP r0, #0
-     *   LDREQ r0, msg_n
-     *   BEQ lib_throw_runtime_error
-     *   BL free
-     *   POP {pc}
+     * PUSH {lr}
+     * CMP r0, #0
+     * LDREQ r0, msg_n
+     * BEQ lib_throw_runtime_error
+     * BL free
+     * POP {pc}
      *
      * @return list of instructions needed for the free_pair label
      */
     @Override
     public List<Instruction> getInstructions() {
-        return new ArrayList<Instruction>() {{
-            add(new LabelIns(FUNC_NAME));
-            add(new BaseInstruction(Ins.PUSH, new RegList(Register.LR)));
-            add(new BaseInstruction(Ins.CMP, Register.R0, new Offset(0)));
-            add(new BaseInstruction(Ins.LDREQ, Register.R0
-                    , new Immediate(ERROR_MESSAGE_LOCATION)));
-            add(new BaseInstruction(Ins.BEQ
-                    , new LabelOp(ThrowRuntimeError.FUNC_NAME)));
-            add(new BaseInstruction(Ins.BL, new LabelOp("free")));
-            add(new BaseInstruction(Ins.POP, new RegList(Register.PC)));
-        }
+        return new ArrayList<Instruction>() {
+            {
+                add(new LabelIns(FUNC_NAME));
+                add(new BaseInstruction(Ins.PUSH, new RegList(Register.LR)));
+                add(new BaseInstruction(Ins.CMP, Register.R0, new Offset(0)));
+                add(new BaseInstruction(Ins.LDREQ, Register.R0
+                        , new Immediate(ERROR_MESSAGE_LOCATION)));
+                add(new BaseInstruction(Ins.BEQ
+                        , new LabelOp(ThrowRuntimeError.FUNC_NAME)));
+                add(new BaseInstruction(Ins.BL, new LabelOp("free")));
+                add(new BaseInstruction(Ins.POP, new RegList(Register.PC)));
+            }
         };
     }
 

@@ -5,9 +5,6 @@ import codegen.CodeGenerator;
 import codegen.Instruction;
 import codegen.instructions.BaseInstruction;
 import codegen.instructions.Ins;
-import codegen.libfuncs.runtimeerror.CheckArrayBounds;
-import codegen.operands.LabelOp;
-import codegen.operands.Offset;
 import codegen.operands.Register;
 import codegen.operands.StackLocation;
 import main.CompileTimeError;
@@ -19,7 +16,6 @@ import visitor.nodes.ExprNode;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ArrayElementNode extends ExprNode<WACCParser.ArrayElemContext> {
 
@@ -85,14 +81,18 @@ public class ArrayElementNode extends ExprNode<WACCParser.ArrayElemContext> {
     }
 
     @Override
-    public List<Instruction> generateInstructions(CodeGenerator codeGenRef, List<Register> availableRegisters) {
+    public List<Instruction> generateInstructions(CodeGenerator codeGenRef,
+                                                  List<Register>
+                                                          availableRegisters) {
         List<Instruction> instructions = new LinkedList<>();
 
-        instructions.addAll(CodeGenerator.getArrayPointer(codeGenRef, availableRegisters,
+        instructions.addAll(CodeGenerator.getArrayPointer(codeGenRef,
+                availableRegisters,
                 exprNodeList, type, currentST, ident));
         Register reg1 = availableRegisters.get(0);
 
-        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type), reg1, new StackLocation(reg1)));
+        instructions.add(new BaseInstruction(Ins.getLdrInstruction(type),
+                reg1, new StackLocation(reg1)));
 
         return instructions;
     }
