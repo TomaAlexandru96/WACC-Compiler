@@ -62,25 +62,25 @@ public class ForNode extends StatNode<WACCParser.ForStatContext> {
         String label1 = codeGenRef.getNextLabel();
         String label2 = codeGenRef.getNextLabel();
 
-        instructions.addAll(assignment.generateInstructions(codeGenRef, availableRegisters));
-        Register assigned = availableRegisters.get(0);
+        List<Instruction> loopBlock = new ArrayList<>();
+
+        loopBlock.addAll(assignment.generateInstructions(codeGenRef, availableRegisters));
         List<Register> bodyAvailableRegs = availableRegisters.stream()
                 .skip(1).collect(Collectors.toList());
 
-        instructions.add(new BaseInstruction(Ins.B, new LabelOp(label1)));
-        instructions.add(new LabelIns(label2));
+        loopBlock.add(new BaseInstruction(Ins.B, new LabelOp(label1)));
+        loopBlock.add(new LabelIns(label2));
 
-        List<Instruction> inBetween = body.generateInstructions(codeGenRef,
-                availableRegisters);
-        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore
+        loopBlock.addAll(CodeGenerator.makeSpaceOnStackAndRestore
                 (currentST, inBetween));
 
-        instructions.addAll(stepAssignment.generateInstructions(codeGenRef, availableRegisters));
-        instructions.add(new LabelIns(label1));
-        instructions.addAll(condition.generateInstructions(codeGenRef, bodyAvailableRegs));
-        instructions.add(new BaseInstruction(Ins.CMP, bodyAvailableRegs.get(0), new Offset(1)));
-        instructions.add(new BaseInstruction(Ins.BEQ, new LabelOp(label2)));
+        loopBlock.addAll(stepAssignment.generateInstructions(codeGenRef, availableRegisters));
+        loopBlock.add(new LabelIns(label1));
+        loopBlock.addAll(condition.generateInstructions(codeGenRef, bodyAvailableRegs));
+        loopBlock.add(new BaseInstruction(Ins.CMP, bodyAvailableRegs.get(0), new Offset(1)));
+        loopBlock.add(new BaseInstruction(Ins.BEQ, new LabelOp(label2)));
 
+        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore(currentST, loopBlock));
         return instructions;
     }
 }
