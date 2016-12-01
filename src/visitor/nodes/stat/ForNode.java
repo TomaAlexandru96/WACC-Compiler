@@ -70,7 +70,10 @@ public class ForNode extends StatNode<WACCParser.ForStatContext> {
         instructions.add(new BaseInstruction(Ins.B, new LabelOp(label1)));
         instructions.add(new LabelIns(label2));
 
-        instructions.addAll(body.generateInstructions(codeGenRef, bodyAvailableRegs));
+        List<Instruction> inBetween = body.generateInstructions(codeGenRef,
+                availableRegisters);
+        instructions.addAll(CodeGenerator.makeSpaceOnStackAndRestore
+                (currentST, inBetween));
 
         instructions.addAll(stepAssignment.generateInstructions(codeGenRef, availableRegisters));
         instructions.add(new LabelIns(label1));
