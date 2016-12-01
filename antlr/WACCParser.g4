@@ -14,19 +14,27 @@ func: type IDENT OPEN_PARENTHESES (param (COMMA param)*)? CLOSE_PARENTHESES IS s
 param: type IDENT
      ;
 
-stat: SKIP_STAT                                           #SkipStat
-    | type IDENT ASSIGN_STAT assignRhs                    #AssignPrimitiveStat
-    | assignLhs ASSIGN_STAT assignRhs                     #AssignPairArrayStat
-    | READ_STAT assignLhs                                 #ReadStat
-    | FREE_STAT expr                                      #FreeStat
-    | RETURN_STAT expr                                    #ReturnStat
-    | EXIT_STAT expr                                      #ExitStat
-    | PRINT_STAT expr                                     #PrintStat
-    | PRINTLN_STAT expr                                   #PrintlnStat
-    | IF_STAT expr THEN_STAT stat ELSE_STAT stat FI_STAT  #IfStat
-    | WHILE_STAT expr DO_STAT stat DONE_STAT              #WhileStat
-    | BEGIN_STAT stat END_STAT                            #ScopeBlockStat
-    | stat COMPOSITION_STAT stat                          #CompositionStat
+assignPrimitive: type IDENT ASSIGN_STAT assignRhs
+               ;
+assignPairArray: assignLhs ASSIGN_STAT assignRhs
+               ;
+
+stat: SKIP_STAT                                                     #SkipStat
+    | assignPrimitive                                               #AssignPrimitiveStat
+    | assignPairArray                                               #AssignPairArrayStat
+    | READ_STAT assignLhs                                           #ReadStat
+    | FREE_STAT expr                                                #FreeStat
+    | RETURN_STAT expr                                              #ReturnStat
+    | EXIT_STAT expr                                                #ExitStat
+    | PRINT_STAT expr                                               #PrintStat
+    | PRINTLN_STAT expr                                             #PrintlnStat
+    | IF_STAT expr THEN_STAT stat ELSE_STAT stat FI_STAT            #IfStat
+    | FOR_STAT OPEN_PARENTHESES assignPrimitive COMPOSITION_STAT
+       expr COMPOSITION_STAT assignPairArray CLOSE_PARENTHESES
+       DO_STAT stat DONE_STAT                                       #ForStat
+    | WHILE_STAT expr DO_STAT stat DONE_STAT                        #WhileStat
+    | BEGIN_STAT stat END_STAT                                      #ScopeBlockStat
+    | stat COMPOSITION_STAT stat                                    #CompositionStat
     ;
 
 assignLhs: IDENT      #AssignLhsIdent

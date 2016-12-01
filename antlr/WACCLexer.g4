@@ -28,6 +28,7 @@ IF_STAT:          'if'      ;
 THEN_STAT:        'then'    ;
 ELSE_STAT:        'else'    ;
 FI_STAT:          'fi'      ;
+FOR_STAT:         'for'     ;
 WHILE_STAT:       'while'   ;
 DO_STAT:          'do'      ;
 DONE_STAT:        'done'    ;

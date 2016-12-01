@@ -1,4 +1,4 @@
-package visitor.nodes.stat;
+package visitor.nodes.util;
 
 import antlr.WACCParser;
 import codegen.CodeGenerator;
@@ -15,6 +15,7 @@ import symobjects.identifierobj.TypeObj;
 import symobjects.identifierobj.VariableObj;
 import symobjects.identifierobj.typeobj.ArrayObj;
 import symobjects.identifierobj.typeobj.GenericObj;
+import visitor.Node;
 import visitor.nodes.util.AssignRhsNode;
 import visitor.nodes.StatNode;
 import visitor.nodes.type.TypeNode;
@@ -22,14 +23,13 @@ import visitor.nodes.type.TypeNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignPrimitiveNode extends StatNode<WACCParser
-        .AssignPrimitiveStatContext> {
+public class AssignPrimitiveNode extends Node<WACCParser.AssignPrimitiveContext> {
     private TypeObj type;
     private String ident;
     private AssignRhsNode rhs;
 
     public AssignPrimitiveNode(SymbolTable currentST, WACCParser
-            .AssignPrimitiveStatContext ctx, TypeNode type, AssignRhsNode
+            .AssignPrimitiveContext ctx, TypeNode type, AssignRhsNode
                                        assignRhs) {
         super(currentST, ctx);
 
