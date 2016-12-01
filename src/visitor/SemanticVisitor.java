@@ -454,6 +454,16 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
+    public Node visitDoWhileStat(@NotNull WACCParser.DoWhileStatContext ctx) {
+        createChildST();
+        DoWhileNode doWhileBlock = new DoWhileNode(currentST, ctx, visitExprNodes(ctx.expr()),
+                visitStatNode(ctx.stat()));
+        closeCurrentScope();
+        return doWhileBlock;
+    }
+
+
+    @Override
     public PairElemTypeNode visitPairElemType(
             @NotNull WACCParser.PairElemTypeContext ctx) {
         if (ctx.baseType() != null) {

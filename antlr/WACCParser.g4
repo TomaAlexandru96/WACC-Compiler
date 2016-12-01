@@ -24,6 +24,7 @@ stat: SKIP_STAT                                           #SkipStat
     | PRINT_STAT expr                                     #PrintStat
     | PRINTLN_STAT expr                                   #PrintlnStat
     | IF_STAT expr THEN_STAT stat ELSE_STAT stat FI_STAT  #IfStat
+    | DO_STAT stat WHILE_STAT expr DONE_STAT              #DoWhileStat
     | WHILE_STAT expr DO_STAT stat DONE_STAT              #WhileStat
     | BEGIN_STAT stat END_STAT                            #ScopeBlockStat
     | stat COMPOSITION_STAT stat                          #CompositionStat

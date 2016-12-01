@@ -319,6 +319,13 @@ public interface WACCParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnExpr(@NotNull WACCParser.UnExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code DoWhileStat}
+	 * labeled alternative in {@link WACCParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoWhileStat(@NotNull WACCParser.DoWhileStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ScopeBlockStat}
 	 * labeled alternative in {@link WACCParser#stat}.
 	 * @param ctx the parse tree
