@@ -32,6 +32,7 @@ stat: SKIP_STAT                                                     #SkipStat
     | FOR_STAT OPEN_PARENTHESES assignPrimitive COMPOSITION_STAT
        expr COMPOSITION_STAT assignPairArray CLOSE_PARENTHESES
        DO_STAT stat DONE_STAT                                       #ForStat
+    | DO_STAT stat WHILE_STAT expr DONE_STAT                        #DoWhileStat
     | WHILE_STAT expr DO_STAT stat DONE_STAT                        #WhileStat
     | BEGIN_STAT stat END_STAT                                      #ScopeBlockStat
     | stat COMPOSITION_STAT stat                                    #CompositionStat
