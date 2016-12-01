@@ -77,7 +77,6 @@ public class ForNode extends StatNode<WACCParser.ForStatContext> {
         instructions.addAll(condition.generateInstructions(codeGenRef, bodyAvailableRegs));
         instructions.add(new BaseInstruction(Ins.CMP, bodyAvailableRegs.get(0), new Offset(1)));
         instructions.add(new BaseInstruction(Ins.BEQ, new LabelOp(label2)));
-        instructions.add(new LabelIns(label1));
 
         return instructions;
     }
