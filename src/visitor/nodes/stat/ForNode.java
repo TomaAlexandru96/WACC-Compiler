@@ -71,8 +71,7 @@ public class ForNode extends StatNode<WACCParser.ForStatContext> {
         loopBlock.add(new BaseInstruction(Ins.B, new LabelOp(label1)));
         loopBlock.add(new LabelIns(label2));
 
-        loopBlock.addAll(CodeGenerator.makeSpaceOnStackAndRestore
-                (currentST, inBetween));
+        loopBlock.addAll(body.generateInstructions(codeGenRef, bodyAvailableRegs));
 
         loopBlock.addAll(stepAssignment.generateInstructions(codeGenRef, availableRegisters));
         loopBlock.add(new LabelIns(label1));
