@@ -1,0 +1,9 @@
+#Test for nested for loops
+
+begin
+    for (int i = 0; i < 10; i + 1) de
+        for (int j = 0; i < 10; j + 1) do
+            print i + j
+        done
+    done
+end

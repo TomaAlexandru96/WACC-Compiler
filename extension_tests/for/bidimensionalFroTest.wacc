@@ -1,0 +1,9 @@
+begin
+    int[] a = [1,2,3,4,5];
+    int[] b = [6,7,8,9,10];
+    int[][] c = [a, b];
+    for (int i = 0; i < len c; i + 1) do
+        for (int j = 0; j < len c[0]; j + 1) do
+            print c[i][j]
+    done
+end
