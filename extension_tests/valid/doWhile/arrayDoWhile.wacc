@@ -4,5 +4,5 @@ begin
     do
         print arr[i];
         i = i + 1
-    while (i < len arr)
+    while i < len arr done
 end

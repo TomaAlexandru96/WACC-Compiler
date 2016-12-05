@@ -1,0 +1,17 @@
+# while typo
+
+# Output:
+# #syntax_error#
+
+# Exit:
+# 100
+
+# Program:
+
+begin
+    int i = 0;
+    do
+        print i;
+        i = i + 1
+    whil (i < 5)
+end

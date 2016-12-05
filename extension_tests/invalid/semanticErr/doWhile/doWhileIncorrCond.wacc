@@ -1,0 +1,15 @@
+# do while invalid condition
+
+# output:
+# #semantic_erro#
+
+# Exit:
+# 200
+
+# Program
+
+begin
+    do
+        skip
+    while 3 + 6 done
+end

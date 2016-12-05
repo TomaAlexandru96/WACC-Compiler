@@ -1,0 +1,15 @@
+# for missing closing do
+
+# Output
+# #syntax_eeror#
+
+# Exit:
+# 100
+
+# Program:
+
+begin
+    for (inti = 0; i < 10; i+1)
+        skip
+    done
+end

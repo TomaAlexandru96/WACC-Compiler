@@ -1,0 +1,16 @@
+# for typo
+
+# Output;
+# #syntax_error#
+
+# Exit:
+# 100
+
+# Program
+
+begin
+    forr (int i = 0; i < 5; i+1) do
+        skip
+    done
+end
+

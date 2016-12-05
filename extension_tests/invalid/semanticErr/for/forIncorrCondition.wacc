@@ -1,0 +1,15 @@
+# for condition type mismatch
+
+# Ouput:
+# #semantic_error#
+
+# Exit:
+# 200
+
+# Program
+
+begin
+    for (int i = 0; 55; i+1) do 
+        skip
+    done
+end
