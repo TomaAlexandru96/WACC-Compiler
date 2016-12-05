@@ -1,4 +1,4 @@
-package visitor.nodes.stat;
+package visitor.nodes.util;
 
 import antlr.WACCParser;
 import codegen.CodeGenerator;
@@ -10,22 +10,19 @@ import codegen.operands.Register;
 import codegen.operands.StackLocation;
 import main.CompileTimeError;
 import symobjects.SymbolTable;
-import visitor.nodes.util.AssignLhsNode;
-import visitor.nodes.util.AssignRhsNode;
-import visitor.nodes.StatNode;
+import visitor.Node;
 import visitor.nodes.util.assignlhs.AssignLhsIdentNode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AssignPairArrayNode extends StatNode<WACCParser
-        .AssignPairArrayStatContext> {
+public class AssignPairArrayNode extends Node<WACCParser.AssignPairArrayContext> {
     private AssignLhsNode lhs;
     private AssignRhsNode rhs;
 
     public AssignPairArrayNode(SymbolTable currentST, WACCParser
-            .AssignPairArrayStatContext ctx, AssignLhsNode assignLhsNode,
+            .AssignPairArrayContext ctx, AssignLhsNode assignLhsNode,
                                AssignRhsNode assignRhsNode) {
         super(currentST, ctx);
 

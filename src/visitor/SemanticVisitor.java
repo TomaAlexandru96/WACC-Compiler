@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import symobjects.SymbolTable;
 import symobjects.identifierobj.FunctionObj;
 import symobjects.identifierobj.VariableObj;
-import symobjects.identifierobj.typeobj.ArrayObj;
 import symobjects.identifierobj.typeobj.GenericObj;
 import symobjects.identifierobj.typeobj.NullPairObj;
 import symobjects.identifierobj.typeobj.scalarobj.*;
@@ -22,10 +21,7 @@ import visitor.nodes.stat.*;
 import visitor.nodes.type.BaseTypeNode;
 import visitor.nodes.type.PairElemTypeNode;
 import visitor.nodes.type.TypeNode;
-import visitor.nodes.util.AssignLhsNode;
-import visitor.nodes.util.AssignRhsNode;
-import visitor.nodes.util.PairElemNode;
-import visitor.nodes.util.ParamNode;
+import visitor.nodes.util.*;
 import visitor.nodes.util.assignlhs.AssignLhsArrayElemNode;
 import visitor.nodes.util.assignlhs.AssignLhsIdentNode;
 import visitor.nodes.util.assignlhs.AssignLhsPairElemNode;
@@ -209,10 +205,30 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
-    public AssignPairArrayNode visitAssignPairArrayStat(
-            @NotNull WACCParser.AssignPairArrayStatContext ctx) {
+    public AssignPrimitiveNode visitAssignPrimitive(@NotNull WACCParser.AssignPrimitiveContext ctx) {
+        return new AssignPrimitiveNode(currentST, ctx, visitType(ctx.type()),
+                (AssignRhsNode) visit(ctx.assignRhs()));
+    }
+
+    @Override
+    public Node visitForStat(@NotNull WACCParser.ForStatContext ctx) {
+        createChildST();
+        ForNode forNode = new ForNode(currentST, ctx, visitAssignPrimitive(ctx.assignPrimitive()),
+                visitExprNodes(ctx.expr()), visitAssignPairArray(ctx.assignPairArray()), visitStatNode(ctx.stat()));
+        closeCurrentScope();
+        return forNode;
+    }
+
+    @Override
+    public AssignPairArrayNode visitAssignPairArray(@NotNull WACCParser.AssignPairArrayContext ctx) {
         return new AssignPairArrayNode(currentST, ctx, (AssignLhsNode) visit(
                 ctx.assignLhs()), (AssignRhsNode) visit(ctx.assignRhs()));
+    }
+
+    @Override
+    public AssignPairArrayStatNode visitAssignPairArrayStat(
+            @NotNull WACCParser.AssignPairArrayStatContext ctx) {
+        return new AssignPairArrayStatNode(currentST, ctx, visitAssignPairArray(ctx.assignPairArray()));
     }
 
     @Override
@@ -467,6 +483,16 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
+    public Node visitDoWhileStat(@NotNull WACCParser.DoWhileStatContext ctx) {
+        createChildST();
+        DoWhileNode doWhileBlock = new DoWhileNode(currentST, ctx, visitExprNodes(ctx.expr()),
+                visitStatNode(ctx.stat()));
+        closeCurrentScope();
+        return doWhileBlock;
+    }
+
+
+    @Override
     public PairElemTypeNode visitPairElemType(
             @NotNull WACCParser.PairElemTypeContext ctx) {
         if (ctx.baseType() != null) {
@@ -480,10 +506,9 @@ public class SemanticVisitor extends AbstractParseTreeVisitor<Node>
     }
 
     @Override
-    public AssignPrimitiveNode visitAssignPrimitiveStat(
+    public AssignPrimitiveStatNode visitAssignPrimitiveStat(
             @NotNull WACCParser.AssignPrimitiveStatContext ctx) {
-        return new AssignPrimitiveNode(currentST, ctx, visitType(ctx.type()),
-                (AssignRhsNode) visit(ctx.assignRhs()));
+        return new AssignPrimitiveStatNode(currentST, ctx, visitAssignPrimitive(ctx.assignPrimitive()));
     }
 
     @Override
