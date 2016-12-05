@@ -10,8 +10,8 @@ TESTS_VALID  = `find ./extension_tests/valid`
 TESTS_INVALID_SYNATX = `find ./extension_tests/invalid/syntaxErr`
 TESTS_INVALID_SEMANTIC = `find ./extension_tests/invalid/semanticErr`
 
-EMULATE = `arm-linux-gnueabi-gcc -o exe -mcpu=arm1176jzf-s -mtune=arm1176jzf-s
-           ticTacToe.s  && qemu-arm -L /usr/arm-linux-gnueabi/exe`
+#EMULATE = `arm-linux-gnueabi-gcc -o exe -mcpu=arm1176jzf-s -mtune=arm1176jzf-s
+#           ticTacToe.s  && qemu-arm -L /usr/arm-linux-gnueabi/exe`
 
 
 class Fail
@@ -43,7 +43,10 @@ def run_test(tests, name, correct_exitstatus)
         end
     end
     if failed != 0
-        puts "FAILED ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+        puts "FAILED ----------------------------------------------------------
+        -----------------------------------------------------------------------
+        -----------------------------------------------------------------------
+        ----------------------------------------------------------------------"
     end
 
     failedTests.each do |failedTest|
