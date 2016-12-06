@@ -26,9 +26,9 @@ def emulate_tests(tests)
             `./compile #{test}`
             assembly_file = test.split('/').last.chomp("wacc").concat("s")
             execute(assembly_file)
-            correct = `diff output.out #{test.chomp("wacc").concat("out")} | wc -c`
+            correct = `diff #{test.chomp("wacc").concat("out")} output.out | wc -c`
             count += 1
-            if (correct != 0)
+            if (correct.to_i != 0)
                failedTests[failed] = Fail.new test 
                failed += 1
             end
