@@ -23,13 +23,12 @@ def emulate_tests(tests)
     failed = 0
     failedTests = []
     tests.each_line do |test|
+        test = test.chomp
         if ((!File.directory? test) && (test.end_with? ".wacc"))
-            printf("HHHHHHHHHHHHHHHHH")
             expected_file = (File.dirname test).chomp("wacc").concat("out")
             `./compile #{test}`
-            test1 = test.chomp
-            assembly_file = test1.chomp("wacc").concat("s")
-            execute(ASSEMBLY_FILE)
+            assembly_file = test.chomp("wacc").concat("s")
+            execute(assembly_file)
             correct = Open3.capture2(`diff output.out #{expected_file} | wc -c`)
             count += 1
             if (correct != 0)
