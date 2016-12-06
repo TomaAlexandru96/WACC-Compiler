@@ -17,22 +17,22 @@ class Fail
 
 end
 
-def emulate_tests(name)
-    puts "Emulating #{name} ..."
+def emulate_tests(tests)
+    puts "Emulating #{tests} ..."
     count = 1
     failed = 0
     failedTests = []
-    TESTS.each_line do |test|
+    tests.each_line do |test|
         if ((!File.directory? test) && (test.end_with? ".wacc"))
+            printf("HHHHHHHHHHHHHHHHH")
             expected_file = (File.dirname test).chomp("wacc").concat("out")
             `./compile #{test}`
-            test1 = test
+            test1 = test.chomp
             assembly_file = test1.chomp("wacc").concat("s")
             execute(ASSEMBLY_FILE)
             correct = Open3.capture2(`diff output.out #{expected_file} | wc -c`)
             count += 1
-            printf("HERE!!!!!!!!!!!") 
-            if (correct != 1)
+            if (correct != 0)
                failedTests[failed] = Fail.new test 
                failed += 1
             end
@@ -48,7 +48,7 @@ def emulate_tests(name)
     failedTests.each do |failedTest|
         puts failedTest.test
     end
-    puts "#{name} : #{count - failed}/#{count}"
+    #puts "#{name} : #{count - failed}/#{count}"
 end
 
 puts "Making ..."
