@@ -26,11 +26,12 @@ def emulate_tests(name)
         if ((!File.directory? test) && (test.end_with? ".wacc"))
             expected_file = (File.dirname test).chomp("wacc").concat("out")
             `./compile #{test}`
-            svae test strign
-            assembly_file = test.chomp("wacc").concat("s")
+            test1 = test
+            assembly_file = test1.chomp("wacc").concat("s")
             execute(ASSEMBLY_FILE)
             correct = Open3.capture2(`diff output.out #{expected_file} | wc -c`)
             count += 1
+            printf("HERE!!!!!!!!!!!") 
             if (correct != 1)
                failedTests[failed] = Fail.new test 
                failed += 1
