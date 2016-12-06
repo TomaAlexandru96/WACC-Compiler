@@ -4,8 +4,7 @@ require "open3"
 TESTS = `find ./extension_tests/valid`
 
 def execute(program_s)
-    `arm-linux-gnueabi-gcc -o exe -mcpu=arm1176jzf-s -mtune=arm1176jzf-s
-    #{program_s} && qemu-arm -L /usr/arm-linux-gnueabi/exe > output.out`
+    command = `arm-linux-gnueabi-gcc -o exe -mcpu=arm1176jzf-s -mtune=arm1176jzf-s #{program_s} && qemu-arm -L /usr/arm-linux-gnueabi exe > output.out`
 end
 
 class Fail
@@ -18,18 +17,16 @@ class Fail
 end
 
 def emulate_tests(tests)
-    puts "Emulating #{tests} ..."
     count = 1
     failed = 0
     failedTests = []
     tests.each_line do |test|
         test = test.chomp
         if ((!File.directory? test) && (test.end_with? ".wacc"))
-            expected_file = (File.dirname test).chomp("wacc").concat("out")
             `./compile #{test}`
-            assembly_file = test.chomp("wacc").concat("s")
+            assembly_file = test.split('/').last.chomp("wacc").concat("s")
             execute(assembly_file)
-            correct = Open3.capture2(`diff output.out #{expected_file} | wc -c`)
+            correct = `diff output.out #{test.chomp("wacc").concat("out")} | wc -c`
             count += 1
             if (correct != 0)
                failedTests[failed] = Fail.new test 
@@ -40,14 +37,12 @@ def emulate_tests(tests)
     end
     if failed != 0
         puts "FAILED------------------------------------------------------------
-        ------------------------------------------------------------------------
-        ------------------------------------------------------------------------
         -----------------------------------------------------------------------"
     end
     failedTests.each do |failedTest|
         puts failedTest.test
     end
-    #puts "#{name} : #{count - failed}/#{count}"
+    puts "#{count - failed}/#{count}"
 end
 
 puts "Making ..."
