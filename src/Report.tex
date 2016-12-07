@@ -1,0 +1,173 @@
+\documentclass[11pt]{article}
+
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{graphicx,wrapfig}
+
+\begin{document}
+
+\title{WACC Final Report}
+\author{
+	Alexandru-Iosif Toma,
+    Mihai Vanea,
+	Arthur-Mihai Niculae,
+    Fraser Price
+}
+\maketitle
+
+\section{Introduction}
+Building a compiler from scratch for a tiny while-language was a really interesting
+task to achieve and this project occupied most of our time for one month and a half.
+Following is our final project report. In terms of implementations, we start
+by introducing an overall analysis of our compiler, discussing about the design
+decision we had to take, finishing with an evaluation of our extension.
+We conclude our report with a group reflection and also personal reflection of each teammate.
+
+\section{WACC Compiler - Overall view}
+\iffalse
+THE PRODUCT(1/4)
+1. An analysis and critical evaluation of the quality of the WACC compiler
+2. It meets the functional specification?
+3. Judge that it forms a sound basis for future development
+4. May wish to address performance issues.
+\fi
+Our product is a compiler for a tiny while-language called WACC. The functionality
+it provides includes lexical, syntax and semantic analysis and also code generation
+for a subset of the ARM11 architecture. It is fully functional and every part
+was properly tested. We also believe that our design is easy to extend given the way
+we structured the compiler so far and how much time we've spent thinking about the design.
+
+\section{Compiler Design}
+\iffalse
+THE DESIGN CHOICES(3/4)
+1. An analysis of the design choices that you made during the WACC lab
+2. Design patterns you used when designing your code and why you chose to use them.
+\fi
+The design was one of the most challenging parts of the project due to the fact
+that it can heavily influence how easy it is to extend your code, trying to add
+more functionality to it, but without having to change the existing code in order
+to make space for it. Throughout all the phases of the project we made extensive
+use of some design patterns which made our life easier and served the purpose of
+making our code clean, understandable and also extendable:
+\begin{itemize}[noitemsep,topsep=0pt]
+  \item \textbf{Visitor}:
+    In order to do the semantic and syntax checks for Front-End we used the visitor pattern.
+    Because we we chose Java to code our compiler, we were able to use ANTLR4 library
+    to perform the lexical analysis (split the input file into tokens) and create
+    an abstract syntax tree. After getting the tree, we created a SemanticVisitor class
+    which had a method for visiting each token created by the parser, returning
+    a node corresponding to the token visited.
+  \item \textbf{Exception}:
+    When dealing with semantic checks for the Front-End we used the Exception pattern.
+    Due to the fact that we didn't want our compiler to stop when it reached
+    a semantic error, we made every node from our enriched AST hold a list
+    of the compile time errors encountered so far during the traversal of the tree.
+    Every node was responsible for checking if there exists a semantic error within it
+    (E.g.: an IfNode just checks if the condition is a boolean, if not adds
+    a semantic error to the list, prints it and continues the traversal).
+  \item \textbf{Enriched AST}:
+    Due to the fact that we wanted each node from the tree created by the parser
+    to hold some specific information which we considered necessary in order
+    to fulfill our tasks, we created an enriched AST and consequently a node
+    for every token which was part of the language(E.g.: ReturnNode, PairNode,
+    AssignLhsNode, etc.). In this way we also made the code extendable, in the
+    sense that, if somebody else wants to improve our compiler, they can freely
+    add more needed information in these node and fulfill their functionality.
+  \item \textbf{Abstract methods for instructions}:
+    This was the point where our design decisions made so far really stood out
+     and shined. When we got to the task of generating machine code for Back-End,
+     it was fairly easy to add the new functionality. We created a CodeGenerator
+      class which was responsible with creating the labels, messages and instructions
+      for the program. Here our Front-End beautifully merged with the Back-End,
+      in the sense that we just made every node from our enriched AST be responsible
+      for generating it's own code and CodeGenerator just brought everything together
+      after all the nodes finished their job. Hence, we didn't need to change anything
+      implemented so far, we just added extra functionality.
+\end{itemize}
+
+\section{WACC-Extension}
+\iffalse
+BEYOND THE SPECIFICATION(4/4)
+1. An evaluation of your extensions to your WACC compiler
+2. Describe all of the language extensions, optimisations or other aspects that
+you have added to your compiler, including how these features can be accessed or viewed
+3. BRIEFLY discuss what future extensions you would like to add to your WACC
+compiler if you had more time
+\fi
+This section is about Extension
+
+\section{Group Reflection}
+
+\iffalse
+THE PROJECT MANAGEMENT(2/4):
+1. Analysis of the organisation of your group
+2. Use of project management tools (such as Git)
+3. How your group was structured
+4. How you coordinated your work and detail any tools that helped/hindered your progress
+5. What went well and what you would do differently if you were to do the lab again
+\fi
+
+This projects didn't expose as many challenges in terms of coordinating as we
+expected before starting it. When we formed the group we already knew the main skills
+and knowledge of our teammates and tried to make the skill set as diverse as possible.
+Our communication patterns were very regular because we've learned from previous
+projects that a solid conversation binds a team together. We understood the talents
+of each other before we started to allocate individual tasks  and we always kept
+in mind how crucial it is to actively support each other when help was requested.
+Thus, the moment of frustrations were minimal and every time something didn't go
+as planned or expected, we always remained calm and approached the problem in
+systematic and well defined way. In future, we would like to maintain our communication
+habits, the way we approach and think about solving given tasks, give each other
+constant feedback and always remember that we are all part of a team and it is not
+about the success of an individual, but all of us.
+
+\subsection{Communication}
+As mentioned before, communication was for us one the key aspects which made our
+project go smoothly in the right direction. Right from the beginning we established
+clear communication channels. One interesting point to make here is that every team
+member had the pleasure to behave like a leader throughout the project, which is
+from our point of view it had a huge impact. Even if you have a very good leader
+assigned for the group, it there exists a time where another person has a better
+idea about solving a problem, then he must know that is the time to step back and
+let him take control over the situation. We managed to synchronize our enthusiasm
+and focus, therefore almost every day one of us used to message the entire team
+when do we want to meet and work together on the current tasks, and all of us agreed
+on a convenient time and met in the labs to work.
+
+\subsection{Work distribution}
+Most of the time we worked together, all 4 of us, especially in the beginning
+when it was vital given the design decisions which were involved. We knew that
+spending a little bit more time thinking on the design of the projects and the
+way we are going to implement will have an impact on how easy we can extend the
+compiler afterwards. Our main focus was to make our code easy to understand and
+also if somebody will decide to add extra functionality to the code, they won't
+have to change the existing one (risking to change the behavior and correctness).
+After we came up with the design and knew what we are going to do next, we finally
+managed to split up the work and we adopted the pair programming technique learned
+from Software Engineering Design course. When we weren't together and somebody had
+a good idea on how to solve a bug or functionality they just worked on it individually.
+We also made extensive use of a management tools like Git to make sure we are as
+productive and fast as possible. For every package we had in our project, we created
+a branch in which we've only dealt with it's functionality and after we properly
+tested our implementation we merged it to master so that other teammates can make
+use of it as well.
+
+\section{Personal Reflection}
+After having discussed our group reflection and knowing that there is always
+space for improvement, no matter how well you think you did, we are now taking
+a step backwards to individually reflect on how the project went and what can be improved.
+
+\subsection{Alexandru-Iosif Toma}
+Reflection of Alex
+\subsection{Mihai Vanea}
+Reflection of Mihai
+\subsection{Arthur-Mihai Niculae}
+Reflection of Arthur
+\subsection{Fraser Price}
+Reflection of Fraser
+
+\section{Acknowledgement}
+We gratefully acknowledge the man who wrote the ANTLR4 library (Terence Parr)
+which helped us when working on the Front-End.
+
+\end{document}
