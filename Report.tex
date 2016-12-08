@@ -62,10 +62,8 @@ The design was one of the most challenging parts of the project due to the fact 
     When dealing with semantic checks for the Front-End we used the Exception pattern. Due to the fact that we didn't want our compiler to stop when it reached a semantic error, we made every node from our enriched AST hold a list of the compile time errors encountered so far during the traversal of the tree. Every node was responsible for checking if there exists a semantic error within it (E.g.: an IfNode just checks if the condition is a boolean, if not adds a semantic error to the list, prints it and continues the traversal).
   \item \textbf{Enriched AST}:
     Due to the fact that we wanted each node from the tree created by the parser to hold some specific information which we considered necessary in order to fulfill our tasks, we created an enriched AST and consequently a node for every rule which was part of the language(E.g.: ReturnNode, PairNode, AssignLhsNode, etc.). In this way we also made the code extendable, in the sense that, if somebody else wants to improve our compiler, they can freely add more needed information in these nodes and fulfill their functionality.
-  \item \textbf{Abstract methods for instructions}:
-    This was the point where our design decisions made so far really stood out and shined. When we got to the task of generating machine code for Back-End, it was fairly easy to add the new functionality. We created a CodeGenerator class which was responsible for creating the labels, messages and instructions for the program. Here our Front-End beautifully merged with the Back-End, in the sense that we just made every node from our enriched AST be responsible for generating it's own code and CodeGenerator just brought everything together after all the nodes finished their job. Hence, we didn't need to change anything implemented so far, we just added extra functionality.
+  \item \textbf{Abstract methods for instructions}: We created a CodeGenerator class which was responsible for creating the labels, messages and generating the instructions for the program. Every node from our enriched AST was responsible for generating it's own assembly code. At the end of the generation we have merged all the the instructions from the Data directive, Text directive and the library functions (which we have abstracted by using object oriented principles).
 \end{itemize}
-
 
 \section{WACC Extension}
 \iffalse
@@ -74,7 +72,7 @@ BEYOND THE SPECIFICATION(4/4)
 2. Describe all of the language extensions, optimisations or other aspects that you have added to your compiler, including how these features can be accessed or viewed
 3. BRIEFLY discuss what future extensions you would like to add to your WACC compiler if you had more time
 \fi
-
+At the beginning of the extension, we started implementing a garbage collector, but we had difficulties when we tried to link the generated ARM11 code with the collector.
 We have implemented two control flow structures:
 \begin{itemize}
 \item \textbf{For loop} - This structure represents the C-style for loop with the following syntax:
@@ -93,7 +91,7 @@ while <boolean condition> done
 This control flow structure is almost identical to the while loop, the only difference being that the body of the do-while loop executes at least once regardless of the condition.
 \end{itemize}
 
-We have heavily tested our extension by implementing a ruby test suite. We have tested the syntax and semantic part of the extension as well as the code generation correctness. When we started the extension we were initially thinking of implementing a garbage collector for our language but given the short period of time, we found that the task was quite challenging and not so easy to accomplish given the time constraints.
+We have heavily tested our extension by implementing a ruby test suite. We have tested the syntax and semantic part of the extension as well as the code generation correctness, by emulating the generated assembly code. At the beginning of the extension, we started implementing a garbage collector, but we had difficulties when we tried to link the generated ARM11 code with the collector.
 
 \section{Acknowledgement}
 We gratefully acknowledge the person who wrote the ANTLR4 library (Terence Parr) which helped us when working on the Front-End.
