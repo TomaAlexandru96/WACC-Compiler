@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{enumitem}
 \usepackage{graphicx,wrapfig}
+\usepackage{listings}
 
 \begin{document}
 
@@ -73,10 +74,28 @@ BEYOND THE SPECIFICATION(4/4)
 2. Describe all of the language extensions, optimisations or other aspects that you have added to your compiler, including how these features can be accessed or viewed
 3. BRIEFLY discuss what future extensions you would like to add to your WACC compiler if you had more time
 \fi
-This section is about Extension
 
+We have implemented two control flow structures:
+\begin{itemize}
+\item \textbf{For loop} - This structure represents the C-style for loop with the following syntax:
+\begin{lstlisting}
+for (<assignemnt>; <boolean condition>; <incremental step>) do
+	<statements>
+done
+\end{lstlisting}
+The first step of the for control flow is the assignment of a loop variant which will be modified at each loop iteration according to the instruction from the incremental step. The loop then executes the statements between the scope block while the boolean condition holds. After the for loop is exited all the variables declared within the scope as well as the loop variant are destroyed.
+\item \textbf{Do-while loop} - This structure represents the C-style do-while loop and has the following syntax:
+\begin{lstlisting}
+do
+	<statements>
+while <boolean condition> done
+\end{lstlisting}
+This control flow structure is almost identical to the while loop, the only difference being that the body of the do-while loop executes at least once regardless of the condition.
+\end{itemize}
+
+We have heavily tested our extension by implementing a ruby test suite. We have tested the syntax and semantic part of the extension as well as the code generation correctness. When we started the extension we were initially thinking of implementing a garbage collector for our language but given the short period of time, we found that the task was quite challenging and not so easy to accomplish given the time constraints.
 
 \section{Acknowledgement}
-We gratefully acknowledge the man who wrote the ANTLR4 library (Terence Parr) which helped us when working on the Front-End.
+We gratefully acknowledge the person who wrote the ANTLR4 library (Terence Parr) which helped us when working on the Front-End.
 
 \end{document}
