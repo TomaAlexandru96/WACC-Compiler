@@ -8,4 +8,4 @@ The project was divided into 3 parts:
 
 1. Syntax and Semantic Checking with Error Reporting
 2. Code Generation (ARM11 instructions)
-3. Extension (Created two additional control flow insttructions 'C-style for' and 'C-style do while')
+3. Extension (Created two additional control flow insttructions)
